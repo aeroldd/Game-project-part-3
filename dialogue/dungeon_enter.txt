@@ -1,0 +1,4 @@
+[press any key to continue dialogue]
+You fell down from a great height and hit the ground.
+You hear a voice from the distance.
+{username}.

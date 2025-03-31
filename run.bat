@@ -1,0 +1,3 @@
+cls
+game.exe
+pause
