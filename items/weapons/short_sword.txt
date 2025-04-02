@@ -1,0 +1,3 @@
+NAME: Rusty sword
+ATTACK: 3
+DAMAGE: 5

@@ -47,7 +47,7 @@ int attack(RoomGrid *room, Entity *attacker, Entity *reciever) {
 
     delay(1000);
 
-    if (reciever->currentHP < 0) {
+    if (reciever->currentHP <= 0) {
         printKillMessage(attacker, reciever);
         kill(room, attacker, reciever);
     } else {
@@ -262,36 +262,4 @@ void printCurrentEntityTurn(Entity *entity) {
     fancyPrint("==========\n");
     delay(1000);
     //system("cls");
-}
-
-int attackMenu(RoomGrid *room, Entity *p, Entity **entities, int entityCount) {
-    int runningAttackMenu = 1, isTargetChosen = 0, target = 0;
-    do {
-        system("cls");
-        printf("==========\nATTACK MENU\n==========\n%s's HP: %d\n", p->name, p->currentHP);
-        entities[target]->selected = 1;
-        displayRoomWithPlayerCamera(room, p, 3);
-        printf("Choose target: (space to cycle, c to confirm, x to cancel)\nTargeting %s at (%d, %d)\n",
-               entities[target]->name, entities[target]->gridPos.x, entities[target]->gridPos.y);
-        char key = getch();
-        switch(key) {
-            case ' ':
-                entities[target]->selected = 0;
-                target = (target == entityCount - 1) ? 0 : target + 1;
-                break;
-            case 'c':
-                isTargetChosen = 1;
-                runningAttackMenu = 0;
-                break;
-            case 'x':
-                runningAttackMenu = 0;
-                break;
-        }
-    } while(runningAttackMenu);
-    if (isTargetChosen) {
-        attack(room, p, entities[target]);
-        entities[target]->selected = 0;
-        return 1;
-    }
-    return 0;
 }

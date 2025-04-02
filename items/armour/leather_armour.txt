@@ -1,0 +1,2 @@
+NAME: Leather armour
+AC: 12

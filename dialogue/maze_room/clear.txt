@@ -1,0 +1,8 @@
+After winding through the twisting tunnels
+and slaying the bats, {username} stands victorious!
+{wait}
+In a discrete corner of the last cell, a reflection
+catches {username}'s eyes - a speck of light and metal.
+{wait}
+{username} finds the miner's helmet!
+{wait}

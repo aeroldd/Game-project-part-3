@@ -5,6 +5,9 @@
 #include "util.h"
 #include "dialogue.h"
 #include "pathfinding.h"
+#include "item.h"
+#include "menus.h"
+#include <stdlib.h>
 
 void printGameOver(Entity *player);
 
@@ -12,7 +15,7 @@ int runRoom(char* roomName, Entity *player) {
     // Create the room
     RoomGrid *room = createRoomGrid(roomName);
 
-    printf("room successfully made!");
+    //printf("room successfully made!");
 
     //printEntities(room->entities, room->entityCount);
 
@@ -25,10 +28,17 @@ int runRoom(char* roomName, Entity *player) {
     rollAllInitiatives(&list, room->entities, room->entityCount); // rolls all the entities' initiatives
 
     // Set the player's position
-    setEntityPosition(room, player, (Position){5,5});
+    setEntityPosition(room, player, (Position){1,1});
 
     int running = 1;
     int result = 0;
+
+    // DIALOGUE THINGS
+
+    char *keywords[] = {"{username}"};
+    char *replacements[] = {player->name};
+
+    playDialogue(room->roomEnterDialogue, keywords, replacements, 1);
 
     while(running) {
         system("cls");
@@ -39,7 +49,12 @@ int runRoom(char* roomName, Entity *player) {
         //printEntityStats(currentEntity);
 
         // run the current entity
-        runEntity(room, currentEntity, player);
+        if(runEntity(room, currentEntity, player) == 2) {
+            // run entity returns 2 when the user choses to finish the room and leave the room
+            // leaving room code
+            running = 0;
+            result = PLAYER_WIN;
+        }
 
         currentEntity->isCurrentTurn=0;
         cycleInitiative(&list);
@@ -49,18 +64,13 @@ int runRoom(char* roomName, Entity *player) {
             running = 0;
             result = PLAYER_LOSE;
         }
-
-        if(isRoomCleared(room)) {
-            running = 0;
-            result = PLAYER_WIN;
-        }
     }
 
     if(result == PLAYER_LOSE) {
         printGameOver(player);
     }
     if(result == PLAYER_WIN) {
-        printRoomCleared(room, player);
+        playDialogue(room->roomClearDialogue, keywords, replacements, 1);
     }
 
     return 0;
@@ -81,11 +91,25 @@ void printGameOver(Entity *player) {
 
 int main() {
     // Initialise and create the player
-    Entity *player;
-    createPlayer(&player);
+    Entity *player = NULL;
 
-    playDialogue("dungeon_enter.txt");
+    // Menu things
+    int menuChoice = startGameMenu();
 
-    runRoom("room_2.txt", player);
+    switch(menuChoice) {
+        case 0: {
+            exitGame();
+            break;
+        }
+        // NEW GAME MENU
+        case 1: {
+            player = newGameMenu();
+            runRoom("maze_room.txt", player);
+        }
+    }
+
+    pressAnyKey();
+
+    //runRoom("maze_test.txt", player);
     return 0;
 }

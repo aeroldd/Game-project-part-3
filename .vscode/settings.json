@@ -4,6 +4,9 @@
         "entity.h": "c",
         "combat.h": "c",
         "game.h": "c",
-        "dialogue.h": "c"
+        "dialogue.h": "c",
+        "pathfinding.h": "c",
+        "typeinfo": "c",
+        "menus.h": "c"
     }
 }

@@ -1,4 +1,25 @@
 [press any key to continue dialogue]
-You fell down from a great height and hit the ground.
-You hear a voice from the distance.
+*THUDS*
+What?
+{wait}
+WHERE AM I?
 {username}.
+{wait}
+That's my name?
+{wait}
+* {username} finds themself in a pile of rubble,
+enveloped by darkness, only illuminated by the
+miniscule slivers of light peeking through the
+ceiling *
+{wait}
+* Just as {username} clears the rubble on them, a chilly voice
+rings through their spine *
+{wait}
+You have been chosen to partake in the trials
+of the blade.
+* A ghastly white figure illumates from nothingness 
+and stares at you sternly in your eyes *
+{wait}
+It is dangerous to go alone! Take this.
+!!! {username} recieves the rusty sword! !!!
+{wait}

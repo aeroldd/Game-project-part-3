@@ -7,7 +7,10 @@ Reading the dialogue from text files and fancy printing it onto the screen
 
 #define DIALOGUE_PATH "dialogue/"
 
-void playDialogue(const char* fileName);
-char* replaceKeywords(char* string, char* variableNames[][2], int variableCount);
+// Plays dialogue stored onto a text file, and replaces each keyword in the file with the replacements
+void playDialogue(const char* fileName, char **keywords, char **replacements, int keywordCount);
+
+// Replaces the keywords in a string with its correseponding replacements
+char* replaceKeywords(const char* string, char **keywords, char **replacements, int variableCount);
 
 #endif

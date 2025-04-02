@@ -15,6 +15,8 @@
 
 #define tileSize 5
 
+#define LINE printf("====================\n")
+
 typedef struct {
     int x, y;
 } Position;
@@ -27,6 +29,46 @@ typedef struct {
 #define PLAYER_LOSE 1
 #define PLAYER_WIN 2
 
+// ITEMS
+
+// ITEM TYPES
+
+#define ITEM_PATH "items/"
+
+#define WEAPON 0
+#define ARMOUR 1
+#define CONSUMABLE 2
+
+typedef struct {
+    char name[32];
+    int type;
+} Item;
+
+typedef struct {
+    Item **items;
+    int itemCount;
+    int maxCapacity;
+} Inventory;
+
+typedef struct {
+    Item base;
+    int attack;
+    int damage;
+} Weapon;
+
+typedef struct {
+    Item base;
+    int ac;
+} Armour;
+
+typedef struct {
+    Item base;
+    int value;
+    int count;
+} Consumable;
+
+// Entity things
+
 typedef struct {
     char name[32];
     int type;
@@ -35,22 +77,43 @@ typedef struct {
     Position gridPos;
     int maxHP;
     int currentHP;
+
+    int baseAC;
     int ac;
+
+    int baseSpeed;
     int speed;
+
     int distanceLeft;
     int initiative;
     int initiativeMod;
+
+    int baseAttack;
     int attack;
+
+    int baseDamage;
     int damage;
+
     int selected;
     int gold;
     int id;
     int isCurrentTurn;
+
+    int detectionRadius;
+    int blind;
+
+    Inventory *inventory;
+    Armour *armour;
+    Weapon *weapon;
 } Entity;
+
+#define FLOOR 0
+#define WALL 1
 
 typedef struct {
     Position pos;
     char symbol;
+    int type;
 } RoomTile;
 
 // Initiative linked list storing the index of the entity
@@ -77,6 +140,10 @@ typedef struct {
     int monsterCount;
     RoomTile ***tiles; // 2D array of pointers to RoomTile
     InitiativeList *initiatives; // Pointer to the InitiativeList
+
+    // dialogue file that plays before and after playing a room
+    char roomEnterDialogue[128];
+    char roomClearDialogue[128];
 } RoomGrid;
 
 typedef struct{

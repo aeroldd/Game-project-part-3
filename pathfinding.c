@@ -109,3 +109,39 @@ Position* findShortestPath(RoomGrid *room, Position start, Position target, int 
 
     return path;
 }
+
+// This function determines if pos2 is in the line of sight of pos1
+int lineOfSight(Position pos1, Position pos2, int radius, RoomGrid *room) {
+        // Calculate the difference in x and y
+        int dx = abs(pos2.x - pos1.x);
+        int dy = abs(pos2.y - pos1.y);
+        int sx = (pos1.x < pos2.x) ? 1 : -1;
+        int sy = (pos1.y < pos2.y) ? 1 : -1;
+        int err = dx - dy;
+    
+        int x = pos1.x;
+        int y = pos1.y;
+    
+        // Check if the target is within the radius
+        if ((dx * dx + dy * dy) > (radius * radius)) {
+            return 0; // Out of range
+        }
+    
+        while (x != pos2.x || y != pos2.y) {
+            // If we hit a wall, there's no line of sight
+            if (room->tiles[y][x]->type == WALL) {
+                return 0; // Blocked
+            }
+    
+            int e2 = 2 * err;
+            if (e2 > -dy) {
+                err -= dy;
+                x += sx;
+            }
+            if (e2 < dx) {
+                err += dx;
+                y += sy;
+            }
+        }
+        return 1; // Line of sight is clear
+}

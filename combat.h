@@ -63,6 +63,6 @@ void reward(Entity *e, int gold);
 
 void printCurrentEntityTurn(Entity *entity);
 
-int attackMenu(RoomGrid *room, Entity *p, Entity **entities, int entityCount);
+
 
 #endif

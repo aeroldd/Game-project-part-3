@@ -4,6 +4,8 @@
 #include "pathfinding.h"
 #include "dialogue.h"
 #include "combat.h"
+#include "item.h"
+#include "menus.h"
 #include <conio.h>
 #include <time.h>
 
@@ -12,101 +14,142 @@
 int id;
 
 Entity *createEntity(char *name, int type, char symbol, Position mapPos, Position gridPos,
-                     int maxHP, int ac, int speed, int initiativeMod, int attack, int damage, int gold) {
+                     int maxHP, int ac, int speed, int initiativeMod, int attack, int damage, int gold, int viewRadius, int blind) {
     Entity *entity = malloc(sizeof(Entity));
     if (!entity) return NULL;
     strncpy(entity->name, name, sizeof(entity->name) - 1);
     entity->name[sizeof(entity->name) - 1] = '\0';
     entity->type = type;
     entity->symbol = symbol;
+
     entity->pos = mapPos;
     entity->gridPos = gridPos;
+
     entity->maxHP = maxHP;
     entity->currentHP = maxHP;
+
     entity->ac = ac;
+    entity->baseAC = ac;
+
     entity->speed = speed;
     entity->initiativeMod = initiativeMod;
+    entity->distanceLeft = speed;
+
     entity->attack = attack;
+    entity->baseAttack = attack;
+
     entity->damage = damage;
+    entity->baseDamage = damage;
+
     entity->selected = 0;
     entity->gold = gold;
-    entity->distanceLeft = speed;
+
     entity->initiative=0;
     entity->isCurrentTurn=0;
+
+    entity->detectionRadius = viewRadius;
+    entity->blind = blind;
+
+    entity->inventory = NULL;
+    entity->armour = NULL;
+    entity->weapon = NULL;
+
     return entity;
 }
 
 Entity *createEntityFromFile(char* entityName, Position mapPos, Position gridPos, int currentHealth) {
+    // Prepare the file path of the entity
     char filePath[64];
     strcpy(filePath, ENTITY_PATH);
     strcat(filePath, entityName);
+
+    // Open the file
     FILE *entityFile = fopen(filePath, "r");
     if (!entityFile) {
         printf("ERROR - The entity %s you have entered doesn't exist.\n", filePath);
         return NULL;
     }
+
+    // Allocate memory for the single entity
     Entity *entity = malloc(sizeof(Entity));
     if(!entity) {
         perror("Error - memory allocation for entity unsuccessful.");
         fclose(entityFile);
         return NULL;
     }
+
+
     char buffer[1024] = "";
+
     fgets(buffer, sizeof(buffer), entityFile);
     sscanf(buffer, "NAME: %[^\n]", entity->name);
+
     fgets(buffer, sizeof(buffer), entityFile);
     sscanf(buffer, "TYPE: %d", &(entity->type));
+
     fgets(buffer, sizeof(buffer), entityFile);
     sscanf(buffer, "SYMBOL: %c", &(entity->symbol));
+
     entity->pos = mapPos;
     entity->gridPos = gridPos;
+
     fgets(buffer, sizeof(buffer), entityFile);
     sscanf(buffer, "MAX HEALTH: %d", &(entity->maxHP));
-    entity->currentHP = currentHealth;
+
+    // The entity's current health is set by the function - for default health (same health max), the value -1 can be
+    // passed as an arguement
+    if(currentHealth == -1) entity->currentHP = entity->maxHP;
+    else entity->currentHP = currentHealth;
+
     fgets(buffer, sizeof(buffer), entityFile);
     sscanf(buffer, "ARMOUR: %d", &(entity->ac));
+
     fgets(buffer, sizeof(buffer), entityFile);
     sscanf(buffer, "SPEED: %d", &(entity->speed));
+
     fgets(buffer, sizeof(buffer), entityFile);
     sscanf(buffer, "INITIATIVE MOD: %d", &(entity->initiativeMod));
+
     fgets(buffer, sizeof(buffer), entityFile);
     sscanf(buffer, "ATTACK: %d", &(entity->attack));
+
     fgets(buffer, sizeof(buffer), entityFile);
     sscanf(buffer, "DAMAGE: %d", &(entity->damage));
+
     fgets(buffer, sizeof(buffer), entityFile);
     sscanf(buffer, "GOLD REWARD: %d", &(entity->gold));
+
     entity->selected = 0;
-    entity->initiative=0;
-    entity->isCurrentTurn=0;
-    entity->distanceLeft=entity->speed;
+    entity->initiative = 0;
+    entity->isCurrentTurn = 0;
+    entity->distanceLeft = entity->speed;
+
+    entity->weapon=NULL;
+
     fclose(entityFile);
     return entity;
 }
 
 // Player creation
 
-// menu for creating a player
-void createPlayer(Entity **player) {
-    char username[32];
-    char symbol;
-    printf("================================\n");
-    fancyPrint("MAKE YOUR CHARACTER\n");
-    printf("================================\n");
-    fancyPrint("Enter your username >> ");
-    scanf("%s", &username);
-    
-    // Clear newline from the buffer
-    while (getchar() != '\n');
 
-    fancyPrint("Enter your player's map symbol (only one character please) >> ");
-    symbol = getchar();
-    
-    *player = createPlayerEntity(username, symbol, (Position) {2,2}, (Position) {2,2});
-    printf("================================\n");
-}
 
 Entity *createPlayerEntity(char *name, char symbol, Position mapPos, Position gridPos) {
-    return createEntity(name, PLAYER, symbol, mapPos, gridPos, 20, 12, 30, 5, 5, 6, 5);
+    Entity *player = createEntityFromFile("player_default.txt", mapPos, gridPos, -1);
+
+    setEntityName(player, name);
+    player->symbol = symbol;
+    player->weapon = NULL;
+
+    // Initialise the player's inventory
+    initInventory(&(player->inventory), 4);
+
+    return player;
+}
+
+void setEntityName(Entity *entity, const char* name) {
+    strncpy(entity->name, name, sizeof(entity->name) - 1); // Copy safely
+    entity->name[sizeof(entity->name) - 1] = '\0'; // Null-terminate to avoid overflow
 }
 
 Entity *getEntityAtGridPosition(RoomGrid *room, Position pos) {
@@ -118,7 +161,7 @@ Entity *getEntityAtGridPosition(RoomGrid *room, Position pos) {
     return NULL;
 }
 
-int setEntityPosition(RoomGrid *room, Entity *e, Position pos) {
+int setEntityPosition(RoomGrid *room, Entity *entity, Position pos) {
     if (pos.x >= 0 && pos.x < room->width && pos.y >= 0 && pos.y < room->height) {
         if(room->tiles[pos.y][pos.x]->symbol == '#') {
             //printf("that is a wall!\n");
@@ -128,7 +171,7 @@ int setEntityPosition(RoomGrid *room, Entity *e, Position pos) {
                 //printf("there is an entity on this tile\n");
                 return 0;
             }
-            e->gridPos = pos;
+            entity->gridPos = pos;
             return 1;
         }
     }
@@ -227,26 +270,33 @@ void printEntities(Entity **entities, int entityCount){
 }
 
 // Print the entity's stats
-void printEntityStats(Entity *e) {
-    printf("==========\n");
-    printf("%s's stats\n", e->name);
-    printf("==========\n");
-    printf("HP: %d/%d\n", e->currentHP, e->maxHP);
-    printf("Gold: %d\n", e->gold);
-    printf("Armour: %d\n", e->ac);
-    printf("Weapon: %s (+%d hit, %d-%d damage)\n", "to be implemented", 10, 10, e->damage);
-    printf("Travel distance left: %d (%d speed)\n", e->distanceLeft, e->speed);
-    printf("Grid position: %d, %d\n", e->gridPos.x, e->gridPos.y);
-    printf("At room: %d, %d\n", e->pos.x, e->pos.y);
-    printf("==========\n");
+void printEntityStats(Entity *entity) {
+    printf("====================\n");
+    printf("%s's stats\n", entity->name);
+    printf("====================\n");
+    printf("HP: %d/%d\t", entity->currentHP, entity->maxHP);
+    printf("Armour: %d\t", entity->ac);
+    printf("Travel distance left: %d (%d speed)\n", entity->distanceLeft, entity->speed);
+    printf("Gold: %d\t", entity->gold);
+
+    char* weaponName;
+    // No weapon
+    if(!entity->weapon) weaponName = "Fists";
+    else weaponName = entity->weapon->base.name;
+
+    printf("Weapon: %s (+%d hit, %d)\n", weaponName, entity->attack, entity->damage);
+    printf("====================\n");
+    printf("Grid position: %d, %d\n", entity->gridPos.x, entity->gridPos.y);
+    printf("At room: %d, %d\n", entity->pos.x, entity->pos.y);
+    printf("====================\n");
 }
 
 // Runs the entity
-void runEntity(RoomGrid *room, Entity *entity, Entity *player) {
+int runEntity(RoomGrid *room, Entity *entity, Entity *player) {
     // If the entity is a player, it should run the move menu
     if(entity->type==PLAYER){
         printCurrentEntityTurn(entity);
-        roomActionMenu(room, entity);
+        return roomActionMenu(room, entity);
     }
     if(entity->type==MONSTER) {
         runMonster(room, entity, player);
@@ -268,11 +318,11 @@ void runMonster(RoomGrid *room, Entity *entity, Entity *player) {
         // Iterate through the path array and move the monster to the position
         //printf("moving to the player\n");
         for(int i = 1; (i < pathLength-1) && (entity->distanceLeft >= 5); i++) {
-            printf("step %d -> %d, %d\n", i, path[i].x, path[i].y);
+            //printf("step %d -> %d, %d\n", i, path[i].x, path[i].y);
             Position oldPos = entity->gridPos;
             if(setEntityPosition(room, entity, path[i])) {
                 entity->distanceLeft -=5;
-                printf("My distance left is %d", entity->distanceLeft);
+                //printf("My distance left is %d", entity->distanceLeft);
             }
             // Reaches the else statement when the entity has colided with a wall or an entity
             else{
@@ -306,10 +356,13 @@ void runMonster(RoomGrid *room, Entity *entity, Entity *player) {
         // Reset their distance left
         entity->distanceLeft = entity->speed;
     }
+    // If the player isnt in the detection range, then it will just randomly move
     else {
-        playDialogue("monsters_stil_in_room.txt");
-        monsterRoam(room, entity, 10);
-        delay(1000);
+        printf("====================\n");
+        playDialogue("monsters_still_in_room.txt", NULL, NULL, 0);
+        printf("\n====================\n");
+        monsterRoam(room, entity, entity->speed);
+        pressAnyKey();
     }
 }
 
@@ -322,14 +375,42 @@ void monsterRoam(RoomGrid *room, Entity *entity, int maxDistance) {
 
     Position newPos = entity->gridPos; // Start from current position
 
-    // Determine new position based on direction
-    switch (direction) {
-        case 0: newPos.y -= distance; break; // Move up
-        case 1: newPos.y += distance; break; // Move down
-        case 2: newPos.x -= distance; break; // Move left
-        case 3: newPos.x += distance; break; // Move right
+    // iterate through the distances
+
+    for(int i = 0; i < distance ; i += 5) {
+        switch (direction) {
+            case 0: newPos.y -= 1; break; // Move up
+            case 1: newPos.y += 1; break; // Move down
+            case 2: newPos.x -= 1; break; // Move left
+            case 3: newPos.x += 1; break; // Move right
+        }
     }
 
     // Update entity position
     setEntityPosition(room, entity, newPos);
+}
+
+// Update the entity's stats based on the equipment equiped
+void updateEntityStats(Entity *entity) {
+    // Update the entity's armour
+    updateEntityArmour(entity);
+    updateEntityWeapon(entity);
+}
+
+void updateEntityArmour(Entity *entity) {
+    if(entity->armour != NULL) {
+        entity->ac = entity->armour->ac;
+        return;
+    }
+    entity->ac = entity->baseAC;
+}
+
+void updateEntityWeapon(Entity *entity) {
+    if(entity->weapon != NULL) {
+        entity->attack = entity->weapon->attack;
+        entity->damage = entity->weapon->damage;
+        return;
+    }
+    entity->attack = entity->baseAttack;
+    entity->damage = entity->baseDamage;   
 }

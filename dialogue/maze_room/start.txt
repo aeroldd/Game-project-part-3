@@ -1,0 +1,6 @@
+As {username} enters this room, they notice
+the corridors, once wide caverns, caving in
+to narrower passageways.
+{wait}
+The sound of wings flapping echo through the halls.
+{wait}

@@ -1,0 +1,2 @@
+NAME: Small potion
+VALUE: 8
