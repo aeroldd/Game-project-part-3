@@ -166,12 +166,18 @@ int roomActionMenu(RoomGrid *room, Entity *player) {
 
         if(!inventorySelected) printf("INVENTORY: [2]\n");
 
-        if(inventorySelected) printf("EXIT INVENTORY MODE: [x]\n");
-
+        
         // Inventory actions
-        if(inventorySelected) printf("USE ITEM: [5]\n");
-
-        if(inventorySelected) printf("DROP ITEM: [6]\n");
+        // Get the current selected item
+        Item *currentItem = getItemFromInventoryIndex(player->inventory, selectedItemIndex);
+        if(inventorySelected) {
+            if(currentItem->type == WEAPON || currentItem->type == ARMOUR) {
+                printf("EQUIP %s: [5]\n", currentItem->name);
+            }
+            else printf("CONSUME %s: [5]\n", currentItem->name);
+            printf("DROP %s: [6]\n", currentItem->name);
+            printf("EXIT INVENTORY MODE: [x]\n");
+        }
 
         char key = getKeyPress();
     
@@ -254,12 +260,11 @@ int roomActionMenu(RoomGrid *room, Entity *player) {
             case '5': {
                 if(!inventorySelected) break;
                 // Use the item at the current selected item index
-                Item *item = getItemFromInventoryIndex(player->inventory, selectedItemIndex);
-                if(!item) {
+                if(!currentItem) {
                     printf("There is no item at index %d", selectedItemIndex);
                     break;
                 }
-                useItem(player, item);
+                useItem(player, currentItem);
 
                 break;
             }
@@ -268,8 +273,7 @@ int roomActionMenu(RoomGrid *room, Entity *player) {
             case '6': {
                 if (!inventorySelected) break;
                 // Drop the item at the current selected item index
-                Item *itemToDrop = getItemFromInventoryIndex(player->inventory, selectedItemIndex);
-                deleteItemFromInventory(player, itemToDrop, 1);
+                deleteItemFromInventory(player, currentItem, 1);
             }
 
             // read item description
