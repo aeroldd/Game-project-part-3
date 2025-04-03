@@ -171,6 +171,8 @@ int roomActionMenu(RoomGrid *room, Entity *player) {
         // Inventory actions
         if(inventorySelected) printf("USE ITEM: [5]\n");
 
+        if(inventorySelected) printf("DROP ITEM: [6]\n");
+
         char key = getKeyPress();
     
         switch(key) {
@@ -264,8 +266,10 @@ int roomActionMenu(RoomGrid *room, Entity *player) {
 
             // drop item
             case '6': {
-                if (inventorySelected) break;
+                if (!inventorySelected) break;
                 // Drop the item at the current selected item index
+                Item *itemToDrop = getItemFromInventoryIndex(player->inventory, selectedItemIndex);
+                deleteItemFromInventory(player, itemToDrop, 1);
             }
 
             // read item description

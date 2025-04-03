@@ -414,3 +414,16 @@ void updateEntityWeapon(Entity *entity) {
     entity->attack = entity->baseAttack;
     entity->damage = entity->baseDamage;   
 }
+
+// assumes that the item is already in the player's inventory
+void unequipItem(Entity *entity, Item *item) {
+    // check if the item is a weapon or an armour piece
+    if(!(item->type == WEAPON || item->type == ARMOUR)) return;
+    if(item->type == WEAPON) {
+        entity->weapon = NULL;
+        updateEntityWeapon(entity);
+        return;
+    }
+    entity->armour = NULL;
+    updateEntityArmour(entity);
+}

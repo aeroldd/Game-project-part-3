@@ -146,12 +146,17 @@ int useItem(Entity *entity, Item *item) {
     return 0;
 }
 
-// deletes an item from an inventory
-int deleteItemFromInventory(Inventory *inventory, Item *item, int count) {
+// deletes an item from an entity's inventory
+int deleteItemFromInventory(Entity *entity, Item *item, int count) {
+    Inventory *inventory = entity->inventory;
+
+    // terminate if the item doesnt even exist
+    if(!item) return 0;
+
     // Iterate through the inventory and check if the item is there
     for(int i = 0; i < inventory->itemCount; i++) {
         // strcmp is used because strings in c is a pointer to an array of characters so its weird and funny
-        if(strcmp(inventory->items[i]->name, item->name)) {
+        if((strcmp(inventory->items[i]->name, item->name)) == 0) {
             // Check if the item is a consumable
             if(item->type == CONSUMABLE) {
                 // reduce the count of the consumable by the count
@@ -160,11 +165,13 @@ int deleteItemFromInventory(Inventory *inventory, Item *item, int count) {
 
                 // if the consumable's count is 0 or less, the item is deleted
                 if(consumable->count <= 0) {
-                    deleteItem(item);
+                    deleteItem(entity, item);
                 }
                 return 1;
             }
-            deleteItem(item);
+
+            // Every other item that isnt a consumable
+            deleteItem(entity, item);
             inventory->itemCount--;
             return 1;
         }
@@ -173,8 +180,38 @@ int deleteItemFromInventory(Inventory *inventory, Item *item, int count) {
     return 0;
 }
 
-void deleteItem(Item *item) {
+// Removes an item from the inventory and frees it
+void deleteItem(Entity *entity, Item *item) {
+    if (!entity || !item) return;
+
+    Inventory *inventory = entity->inventory;
+
+    // Unequip the item if it's equipped
+    unequipItem(entity, item);
+
+    // Find the item in the inventory
+    int found = 0;
+    for (int i = 0; i < inventory->itemCount; i++) {
+        if (inventory->items[i] == item) {
+            found = 1;
+            // Shift items left to remove the item
+            for (int j = i; j < inventory->itemCount - 1; j++) {
+                inventory->items[j] = inventory->items[j + 1];
+            }
+            inventory->items[inventory->itemCount - 1] = NULL;  // Clear last slot
+            inventory->itemCount--;  // Reduce count
+            break;
+        }
+    }
+
+    if (!found) {
+        printf("Item not found in inventory!\n");
+        return;
+    }
+
+    // Free the memory
     free(item);
+    printf("Item deleted successfully.\n");
 }
 
 void printItemDetails(Item *item) {
