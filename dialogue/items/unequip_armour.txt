@@ -1,0 +1,4 @@
+{username} unsequips {armour_name}!
+{wait}
+{username}'s armour changed from {old_ac} to {new_ac}!
+{wait}
