@@ -1,5 +1,5 @@
 {username} equips {weapon_name}!
-{wait}
+
 Attack changed from {old_attack} to {new_attack}!
 Damage changed from {old_damage} to {new_damage}!
 {wait}
