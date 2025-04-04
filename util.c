@@ -1,8 +1,10 @@
-#include <conio.h>
 #include <time.h>
 #include <stdarg.h>
 #include <stdio.h>
+#include <stdlib.h>
+
 #include "util.h"
+#include "input.h"
 
 // CODE FOR TEXT SCROLLING
 // In RPG games when text is displayed it goes character by character
@@ -49,5 +51,18 @@ void fancyPrint(const char* format, ...) {
 
 void pressAnyKey() {
     fancyPrint("[press any key to continue]\n");
-    getch();
+    getKeyPress();
+}
+
+// Dice rolling!
+int roll(int max) {
+    return (rand() % max) + 1;
+}
+
+// Rolls a d20 with checking for critical success or failure
+int rolld20() {
+    int r = roll(20);
+    if (r == 20) return 100;  // critical
+    if (r == 1) return 101;   // critical failure
+    return r;
 }
