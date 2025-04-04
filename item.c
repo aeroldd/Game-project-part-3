@@ -130,12 +130,25 @@ int useItem(Entity *entity, Item *item) {
         case WEAPON: {
             // Cast the item back to a weapon
             Weapon *weapon = (Weapon*) item;
+
+            // If the entity is already has the weapon equipped, unequip, else equip
+            if(entity->weapon->base.name == item->name) {
+                unequipWeapon(entity);
+                return 1;
+            }
             equipWeapon(entity, weapon);
             return 1;
         }
         case ARMOUR: {
             // Cast the item as armour
             Armour *armour = (Armour*) armour;
+
+            // If the entity is already has the armour equipped, unequip, else equip
+            if(entity->armour->base.name == item->name) {
+                unequipArmour(entity);
+                return 1;
+            }
+
             equipArmour(entity, armour);
             return 1;
         }
@@ -144,6 +157,24 @@ int useItem(Entity *entity, Item *item) {
         }
     }
     return 0;
+}
+
+// When using consumables, the value is added to the entity's health
+void useConsumable(Entity *entity, Consumable *consumable) {
+    if(!consumable) return;
+
+    // add the consumables value to the entity's health and make sure that it is less than the current health
+    int newHealth = MIN(entity->currentHP += consumable->value, entity->maxHP);
+
+    entity->currentHP = newHealth;
+    Item *item = (Item*) consumable;
+    fancyPrint("%s consumed a %s! (+ %d)", entity->name, item->name, consumable->value);
+
+    consumable->count--;
+    if(consumable->count <= 0) {
+        deleteItem(entity, item);
+        free(consumable);        
+    }
 }
 
 // deletes an item from an entity's inventory
