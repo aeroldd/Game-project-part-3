@@ -28,6 +28,11 @@ int movePlayer(RoomGrid *room, Entity *player, char key) {
         }
     }
 
-    fancyPrint("You have run out of movement!!\n");
-    return 0;
+    if(player->distanceLeft == 0) {
+        fancyPrint("You have run out of movement!!\n");
+        return 0;
+    }
+
+    // collides with a wall
+    return 2;
 }
