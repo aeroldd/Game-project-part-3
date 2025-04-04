@@ -54,11 +54,13 @@ typedef struct {
     Item base;
     int attack;
     int damage;
+    int equipped;
 } Weapon;
 
 typedef struct {
     Item base;
     int ac;
+    int equipped;
 } Armour;
 
 typedef struct {
