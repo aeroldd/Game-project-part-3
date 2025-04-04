@@ -378,7 +378,7 @@ void printInventoryBar(Entity *player, int selected, int selectedItem) {
     // Iterate through the inventory's items and print out the names
     for(int i = 0; i < inventory->itemCount; i++) {
         // if the item is selected, the background and foreground colors will be inverted
-        if(i == selectedItem) {
+        if(i == selectedItem && selected) {
             printf("\x1b[7m > %d - %s < \x1b[0m", i, inventory->items[i]->name);
         }
         else {
