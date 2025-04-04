@@ -172,7 +172,11 @@ int roomActionMenu(RoomGrid *room, Entity *player) {
         Item *currentItem = getItemFromInventoryIndex(player->inventory, selectedItemIndex);
         if(inventorySelected) {
             if(currentItem->type == WEAPON || currentItem->type == ARMOUR) {
-                printf("EQUIP %s: [5]\n", currentItem->name);
+                // if the item is equipped, unequip item, else equip item
+                if(((player->weapon == NULL)  && (currentItem->type == WEAPON)) || ((player->armour == NULL) && (currentItem->type == ARMOUR))) {
+                    printf("EQUIP %s: [5]\n", currentItem->name);
+                }
+                else printf("UNEQUIP %s: [5]\n", currentItem->name);
             }
             else printf("CONSUME %s: [5]\n", currentItem->name);
             printf("DROP %s: [6]\n", currentItem->name);
@@ -265,7 +269,6 @@ int roomActionMenu(RoomGrid *room, Entity *player) {
                     break;
                 }
                 useItem(player, currentItem);
-
                 break;
             }
 
@@ -274,6 +277,7 @@ int roomActionMenu(RoomGrid *room, Entity *player) {
                 if (!inventorySelected) break;
                 // Drop the item at the current selected item index
                 deleteItemFromInventory(player, currentItem, 1);
+                //unequipItem(player, currentItem);
             }
 
             // read item description
