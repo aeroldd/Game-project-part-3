@@ -124,6 +124,11 @@ Entity *createEntityFromFile(char* entityName, Position mapPos, Position gridPos
     entity->isCurrentTurn = 0;
     entity->distanceLeft = entity->speed;
 
+    entity->baseAttack = entity->attack;
+    entity->baseDamage = entity->damage;
+    entity->baseAC = entity->ac;
+    entity->baseSpeed = entity->speed;
+
     entity->weapon=NULL;
 
     fclose(entityFile);
@@ -131,9 +136,6 @@ Entity *createEntityFromFile(char* entityName, Position mapPos, Position gridPos
 }
 
 // Player creation
-
-
-
 Entity *createPlayerEntity(char *name, char symbol, Position mapPos, Position gridPos) {
     Entity *player = createEntityFromFile("player_default.txt", mapPos, gridPos, -1);
 
@@ -411,6 +413,7 @@ void updateEntityWeapon(Entity *entity) {
         entity->damage = entity->weapon->damage;
         return;
     }
+    printf("Entity's base attack: %d, entity's base damage: %d");
     entity->attack = entity->baseAttack;
     entity->damage = entity->baseDamage;   
 }
@@ -426,4 +429,48 @@ void unequipItem(Entity *entity, Item *item) {
     }
     entity->armour = NULL;
     updateEntityArmour(entity);
+}
+
+void unequipWeapon(Entity *entity) {
+    Weapon *weapon = entity->weapon;
+    Item *item = (Item *) weapon;
+    // Dialogue keywords and replacements
+
+    // Convert integers to strings - because replacements can only take in strings
+    char old_attack_str[10], new_attack_str[10];
+    sprintf(old_attack_str, "%d", entity->attack);
+    sprintf(new_attack_str, "%d", weapon->attack);
+
+    char old_damage_str[10], new_damage_str[10];
+    sprintf(old_damage_str, "%d", entity->damage);
+    sprintf(new_damage_str, "%d", weapon->damage);
+
+    char *keywords[] = {"{username}", "{weapon_name}", "{old_attack}", "{new_attack}", "{old_damage}", "{new_damage}"};
+    char *replacements[] = {entity->name, item->name, old_attack_str, new_attack_str, old_damage_str, new_damage_str};
+
+    playDialogue("items/equip_weapon.txt", keywords, replacements, 6);
+    
+    entity->weapon = NULL;
+    updateEntityWeapon(entity);
+}
+
+void unequipArmour(Entity *entity) {
+    Armour *armour = entity->armour;
+    Item *item = (Item*) armour;
+
+    // Dialogue keywords and replacements
+
+    // Convert integers to strings - because replacements can only take in strings
+    char old_ac_str[10], new_ac_str[10];
+    sprintf(old_ac_str, "%d", entity->ac);
+    sprintf(new_ac_str, "%d", armour->ac);
+    char *keywords[] = {"{username}", "{armour_name}", "{old_ac}", "{new_ac}"};
+    char *replacements[] = {entity->name, item->name, old_ac_str, new_ac_str};
+
+    playDialogue("items/unequip_armour.txt", keywords, replacements, 4);
+
+    entity->armour = NULL;
+    updateEntityArmour(entity);
+
+    return 1;
 }

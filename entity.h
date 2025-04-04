@@ -39,5 +39,7 @@ void updateEntityArmour(Entity *player);
 void updateEntityWeapon(Entity *player);
 
 void unequipItem(Entity *player, Item *item);
+void unequipWeapon(Entity *player);
+void unequipArmour(Entity *player);
 
 #endif
