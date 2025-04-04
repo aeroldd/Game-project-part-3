@@ -1,15 +1,15 @@
-#include "game.h"
-#include "entity.h"
-#include "room.h"
-#include "combat.h"
-#include "util.h"
-#include "dialogue.h"
-#include "pathfinding.h"
-#include "item.h"
-#include "menus.h"
+#include <stdio.h>
 #include <stdlib.h>
 
-void printGameOver(Entity *player);
+#include "game.h"
+#include "room.h"
+#include "combat.h"
+#include "initiative.h"
+#include "entity.h"
+#include "dialogue.h"
+#include "menus.h"
+#include "util.h"
+
 
 int runRoom(char* roomName, Entity *player) {
     // Create the room
@@ -75,19 +75,6 @@ int runRoom(char* roomName, Entity *player) {
 
     return 0;
 }
-
-void printGameOver(Entity *player) {
-    system("cls");
-    printf("==========\n");
-    fancyPrint("GAME OVER!\n");
-    printf("==========\n");
-    fancyPrint("%s final stats:\n", player->name);
-    fancyPrint("MAX HP: %d\n", player->name);
-    fancyPrint("ARMOUR: %d\n", player->ac);
-    fancyPrint("GOLD: %d\n", player->gold);
-    printf("==========\n");
-}
-
 
 int main() {
     // Initialise and create the player

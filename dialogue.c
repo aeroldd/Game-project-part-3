@@ -1,9 +1,11 @@
-#include "dialogue.h"
-#include "util.h"
 #include <stdio.h>
-#include <conio.h>
+
 #include <string.h>
 #include <stdlib.h>
+
+#include "dialogue.h"
+#include "util.h"
+#include "input.h"
 
 // Variable names will be a 2 array with {<word to replace>, <value>}
 
@@ -61,7 +63,7 @@ void playDialogue(const char* filename, char **keywords, char **replacements, in
         } 
 
         if (waitToken) {
-            getch(); // Only wait for input if {wait} was found
+            getKeyPress(); // Only wait for input if {wait} was found
         }
     }
 

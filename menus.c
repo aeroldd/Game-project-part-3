@@ -1,3 +1,6 @@
+#include <stdio.h>
+#include <stdlib.h>
+
 #include "game.h"
 #include "entity.h"
 #include "room.h"
@@ -353,4 +356,18 @@ int attackMenu(RoomGrid *room, Entity *p, Entity **entities, int entityCount) {
 // The inventory menu!
 void inventoryMenu(int *selected) {
     *selected = 1;
+}
+
+// Printing game over
+
+void printGameOver(Entity *player) {
+    system("cls");
+    printf("==========\n");
+    fancyPrint("GAME OVER!\n");
+    printf("==========\n");
+    fancyPrint("%s final stats:\n", player->name);
+    fancyPrint("MAX HP: %d\n", player->name);
+    fancyPrint("ARMOUR: %d\n", player->ac);
+    fancyPrint("GOLD: %d\n", player->gold);
+    printf("==========\n");
 }

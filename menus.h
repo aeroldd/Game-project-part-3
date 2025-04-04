@@ -24,4 +24,7 @@ int roomActionMenu(RoomGrid *room, Entity *player);
 // Combat menu
 int attackMenu(RoomGrid *room, Entity *p, Entity **entities, int entityCount);
 
+// Game over menu
+void printGameOver(Entity *entity);
+
 #endif

@@ -2,6 +2,7 @@
 #define ENTITY_H
 
 #include "game.h"
+#include "room.h"
 
 extern int id;
 
@@ -13,12 +14,13 @@ void setEntityName(Entity *entity, const char* name);
 
 
 void createPlayer(Entity **player);
-Entity *createPlayerEntity(char *name, char symbol, Position mapPos, Position gridPos);
 
 Entity *getEntityAtGridPosition(RoomGrid *room, Position pos);
 int setEntityPosition(RoomGrid *room, Entity *e, Position pos);
 
 Entity **createEntitiesArray();
+
+// Entity array functions
 int getEntityCount(Entity **entities);
 void addEntityToArray(Entity ***entitiesList, int *count, Entity *entity);
 void removeEntityById(Entity ***entities, int *count, int targetId);
@@ -29,8 +31,6 @@ void printEntities(Entity **e, int entityCount);
 
 // Running entities
 int runEntity(RoomGrid *room, Entity *entity, Entity *player);
-void runMonster(RoomGrid *room, Entity *entity, Entity *player);
-void monsterRoam(RoomGrid *room, Entity *entity, int maxDistance);
 
 // Updates the entity's stats based on the equipment that is equipped
 void updateEntityStats(Entity *player);

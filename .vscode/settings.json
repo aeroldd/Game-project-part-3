@@ -7,6 +7,9 @@
         "dialogue.h": "c",
         "pathfinding.h": "c",
         "typeinfo": "c",
-        "menus.h": "c"
+        "menus.h": "c",
+        "monster.h": "c",
+        "room.h": "c",
+        "util.h": "c"
     }
 }

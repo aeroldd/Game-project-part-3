@@ -1,13 +1,14 @@
+#include <stdlib.h>
+#include <string.h>
+#include <stdio.h>
+
+#include "game.h"
 #include "entity.h"
-#include "util.h"
-#include "room.h"
-#include "pathfinding.h"
-#include "dialogue.h"
-#include "combat.h"
-#include "item.h"
 #include "menus.h"
-#include <conio.h>
-#include <time.h>
+#include "combat.h"
+#include "dialogue.h"
+#include "initiative.h"
+#include "monster.h"
 
 // Implement entity-related functions
 
@@ -133,20 +134,6 @@ Entity *createEntityFromFile(char* entityName, Position mapPos, Position gridPos
 
     fclose(entityFile);
     return entity;
-}
-
-// Player creation
-Entity *createPlayerEntity(char *name, char symbol, Position mapPos, Position gridPos) {
-    Entity *player = createEntityFromFile("player_default.txt", mapPos, gridPos, -1);
-
-    setEntityName(player, name);
-    player->symbol = symbol;
-    player->weapon = NULL;
-
-    // Initialise the player's inventory
-    initInventory(&(player->inventory), 4);
-
-    return player;
 }
 
 void setEntityName(Entity *entity, const char* name) {
@@ -305,93 +292,6 @@ int runEntity(RoomGrid *room, Entity *entity, Entity *player) {
     }
 }
 
-// Runs the monster
-void runMonster(RoomGrid *room, Entity *entity, Entity *player) {
-    // check how close the player is, and according to it it will move towards the player
-    int distanceFromPlayer = getDistancePos(entity->gridPos, player->gridPos);
-    if(distanceFromPlayer < 30) {
-        printCurrentEntityTurn(entity);
-        //printf("%s sees the player\n", entity->name);
-        // move towards the player
-        // Get the shortest path to the player
-        int pathLength = 10;
-        Position *path = findShortestPath(room, entity->gridPos, player->gridPos, &pathLength);
-
-        // Iterate through the path array and move the monster to the position
-        //printf("moving to the player\n");
-        for(int i = 1; (i < pathLength-1) && (entity->distanceLeft >= 5); i++) {
-            //printf("step %d -> %d, %d\n", i, path[i].x, path[i].y);
-            Position oldPos = entity->gridPos;
-            if(setEntityPosition(room, entity, path[i])) {
-                entity->distanceLeft -=5;
-                //printf("My distance left is %d", entity->distanceLeft);
-            }
-            // Reaches the else statement when the entity has colided with a wall or an entity
-            else{
-                printf("I REACHED THE PLAYER LETS GOOO!\n");
-            }
-            displayRoomWithPlayerCamera(room, entity, 5);
-            delay(1000);
-            system("cls");
-        }
-
-        // check if the entity has reached the player
-        Entity **entities = getEntitiesAroundPoint(room, entity->gridPos);
-        int entityCount = 0, inAttackRange = 0;
-        if (entities) {
-            for (int i = 0; entities[i] != NULL; i++) {
-                if (entities[i]->type == PLAYER) {
-                    inAttackRange = 1;
-                    entityCount++;
-                }
-            }
-        }
-
-        // hit a random player that is in attack range (if they are in attack range)
-        if(inAttackRange) {
-            //printf("IN ATTACK RANGE IMMA HIT YOU!\n");
-            int target = rand() % entityCount;
-            //printf("target at index %d\n", target);
-            attack(room, entity, entities[target]);
-        }
-
-        // Reset their distance left
-        entity->distanceLeft = entity->speed;
-    }
-    // If the player isnt in the detection range, then it will just randomly move
-    else {
-        printf("====================\n");
-        playDialogue("monsters_still_in_room.txt", NULL, NULL, 0);
-        printf("\n====================\n");
-        monsterRoam(room, entity, entity->speed);
-        pressAnyKey();
-    }
-}
-
-// Move the monster randomly in the room
-void monsterRoam(RoomGrid *room, Entity *entity, int maxDistance) {
-    if (!room || !entity) return; // Safety check
-
-    int distance = rand() % (maxDistance / 5); // Random step size
-    int direction = rand() % 4; // 0 = up, 1 = down, 2 = left, 3 = right
-
-    Position newPos = entity->gridPos; // Start from current position
-
-    // iterate through the distances
-
-    for(int i = 0; i < distance ; i += 5) {
-        switch (direction) {
-            case 0: newPos.y -= 1; break; // Move up
-            case 1: newPos.y += 1; break; // Move down
-            case 2: newPos.x -= 1; break; // Move left
-            case 3: newPos.x += 1; break; // Move right
-        }
-    }
-
-    // Update entity position
-    setEntityPosition(room, entity, newPos);
-}
-
 // Update the entity's stats based on the equipment equiped
 void updateEntityStats(Entity *entity) {
     // Update the entity's armour
@@ -423,12 +323,10 @@ void unequipItem(Entity *entity, Item *item) {
     // check if the item is a weapon or an armour piece
     if(!(item->type == WEAPON || item->type == ARMOUR)) return;
     if(item->type == WEAPON) {
-        entity->weapon = NULL;
-        updateEntityWeapon(entity);
+        unequipWeapon(entity);
         return;
     }
-    entity->armour = NULL;
-    updateEntityArmour(entity);
+    unequipArmour(entity);
 }
 
 void unequipWeapon(Entity *entity) {
@@ -471,6 +369,4 @@ void unequipArmour(Entity *entity) {
 
     entity->armour = NULL;
     updateEntityArmour(entity);
-
-    return 1;
 }

@@ -1,9 +1,13 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+#include <string.h>
+
+#include "game.h"
 #include "room.h"
 #include "entity.h"
-#include "combat.h"
 #include "util.h"
-#include "item.h"
-#include "input.h"
+
 
 RoomTile ***createRoomTilesArray(RoomGrid *room) {
     RoomTile ***roomTiles = malloc(room->height * sizeof(RoomTile **));
@@ -99,7 +103,6 @@ void displayRoomWithPlayerCamera(RoomGrid *room, Entity *p, int camSize) {
     }
     printf("-\n");
 }
-
 
 int getDistancePos(Position pos1, Position pos2) {
     return (int) tileSize * abs(sqrt(pow((pos2.x - pos1.x), 2) + pow((pos2.y - pos1.y), 2)));
