@@ -448,7 +448,7 @@ void unequipWeapon(Entity *entity) {
     char *keywords[] = {"{username}", "{weapon_name}", "{old_attack}", "{new_attack}", "{old_damage}", "{new_damage}"};
     char *replacements[] = {entity->name, item->name, old_attack_str, new_attack_str, old_damage_str, new_damage_str};
 
-    playDialogue("items/equip_weapon.txt", keywords, replacements, 6);
+    playDialogue("items/unequip_weapon.txt", keywords, replacements, 6);
     
     entity->weapon = NULL;
     updateEntityWeapon(entity);
