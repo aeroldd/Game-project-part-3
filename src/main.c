@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 
 #include "core/game.h"
 #include "world/room.h"
@@ -77,6 +78,9 @@ int runRoom(char* roomName, Entity *player) {
 }
 
 int main() {
+    // Set the random seed!
+    srand(time(NULL));
+
     // Initialise and create the player
     Entity *player = NULL;
 
