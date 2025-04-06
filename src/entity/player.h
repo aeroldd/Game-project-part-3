@@ -1,11 +1,7 @@
 #ifndef PLAYER_H
 #define PLAYER_H
 
-#include "game.h"
-#include "entity.h"
-#include "util.h"
-#include "room.h"
-#include "item.h"
+#include "../core/game.h"
 
 // Creates a player entity
 Entity *createPlayerEntity(char *name, char symbol, Position mapPos, Position gridPos);

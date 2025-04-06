@@ -1,16 +1,16 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "game.h"
-#include "entity.h"
-#include "room.h"
-#include "item.h"
-#include "util.h"
-#include "combat.h"
+#include "../core/game.h"
 #include "menus.h"
-#include "input.h"
-#include "dialogue.h"
-#include "player.h"
+#include "../entity/entity.h"
+#include "../world/room.h"
+#include "../item/item.h"
+#include "../util/util.h"
+#include "combat.h"
+#include "../util/input.h"
+#include "../dialogue/dialogue.h"
+#include "../entity/player.h"
 
 int startGameMenu() {
     printGameTitle();

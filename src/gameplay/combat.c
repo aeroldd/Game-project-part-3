@@ -2,8 +2,8 @@
 #include <stdio.h>
 
 #include "combat.h"
-#include "entity.h"
-#include "util.h"
+#include "../entity/entity.h"
+#include "../util/util.h"
 #include "initiative.h"
 
 int damageEntity(Entity *e, int damage) {

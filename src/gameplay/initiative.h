@@ -1,7 +1,7 @@
 #ifndef INITIATIVE_H
 #define INIITATIVE_H
 
-#include "game.h"
+#include "../core/game.h"
 
 // Initialises the initiative list - sets the InitiativeList to the room's initiativeList attribute
 void initList(RoomGrid *room, InitiativeList *list);

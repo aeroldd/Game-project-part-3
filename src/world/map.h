@@ -1,7 +1,7 @@
 #ifndef MAP_H
 #define MAP_H
 
-#include "game.h"
+#include "../core/game.h"
 
 // generates the map
 void generateMap(Room (*rooms)[5]);

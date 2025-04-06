@@ -2,11 +2,11 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "game.h"
+#include "../core/game.h"
 #include "item.h"
-#include "util.h"
-#include "dialogue.h"
-#include "entity.h"
+#include "../util/util.h"
+#include "../dialogue/dialogue.h"
+#include "../entity/entity.h"
 
 Item *createItemFromFile(char* itemName, int itemType) {
     // Prepare the file path of the item

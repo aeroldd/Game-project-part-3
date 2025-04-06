@@ -1,6 +1,10 @@
 #include <stdlib.h>
 
 #include "player.h"
+#include "entity.h"
+#include "../util/util.h"
+#include "../world/room.h"
+#include "../item/item.h"
 
 // Player creation
 Entity *createPlayerEntity(char *name, char symbol, Position mapPos, Position gridPos) {

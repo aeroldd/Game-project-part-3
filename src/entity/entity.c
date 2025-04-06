@@ -2,12 +2,12 @@
 #include <string.h>
 #include <stdio.h>
 
-#include "game.h"
+#include "../core/game.h"
 #include "entity.h"
-#include "menus.h"
-#include "combat.h"
-#include "dialogue.h"
-#include "initiative.h"
+#include "../gameplay/menus.h"
+#include "../gameplay/combat.h"
+#include "../dialogue/dialogue.h"
+#include "../gameplay/initiative.h"
 #include "monster.h"
 
 // Implement entity-related functions

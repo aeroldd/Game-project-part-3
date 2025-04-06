@@ -1,8 +1,9 @@
-#include "pathfinding.h"
-#include "entity.h"
 #include <stdbool.h>
 #include <stdlib.h>
 #include <string.h>
+
+#include "pathfinding.h"
+#include "entity.h"
 
 // Define a node structure for BFS.
 typedef struct BFSNode {

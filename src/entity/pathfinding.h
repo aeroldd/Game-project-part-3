@@ -1,7 +1,7 @@
 #ifndef PATHFINDING_H
 #define PATHFINDING_H
 
-#include "game.h"
+#include "../core/game.h"
 
 // Returns the next position for the monster to move towards the target (player).
 // If no valid path is found, returns the monster's current position.

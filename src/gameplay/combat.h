@@ -1,7 +1,7 @@
 #ifndef COMBAT_H
 #define COMBAT_H
 
-#include "game.h"
+#include "../core/game.h"
 
 // Damages entity for the amount of damage indicated
 int damageEntity(Entity *e, int damage);

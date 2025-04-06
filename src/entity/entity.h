@@ -1,8 +1,7 @@
 #ifndef ENTITY_H
 #define ENTITY_H
 
-#include "game.h"
-#include "room.h"
+#include "../core/game.h"
 
 extern int id;
 

@@ -1,8 +1,10 @@
 #ifndef GAME_H
 #define GAME_H
 
-#define ROOM_PATH "rooms/"
-#define ENTITY_PATH "entities/"
+#define ROOM_PATH "../../assets/rooms/"
+#define ENTITY_PATH "../../assets/entities/"
+#define ITEM_PATH "../../assets/items/"
+#define DIALOGUE_PATH "../../assets/dialogue/"
 
 #define MAX(a, b) ((a) > (b) ? (a) : (b))
 #define MIN(a, b) ((a) < (b) ? (a) : (b))
@@ -27,7 +29,6 @@ typedef struct {
 
 // ITEM TYPES
 
-#define ITEM_PATH "items/"
 
 #define WEAPON 0
 #define ARMOUR 1

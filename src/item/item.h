@@ -1,7 +1,7 @@
 #ifndef ITEM_H
 #define ITEM_H
 
-#include "game.h"
+#include "../core/game.h"
 
 // Creates an item from a text file
 Item *createItemFromFile(char* itemName, int itemType);

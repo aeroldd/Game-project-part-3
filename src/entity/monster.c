@@ -1,14 +1,14 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#include "game.h"
+#include "../core/game.h"
 #include "monster.h"
 #include "entity.h"
-#include "dialogue.h"
+#include "../dialogue/dialogue.h"
 #include "pathfinding.h"
-#include "combat.h"
-#include "initiative.h"
-#include "util.h"
+#include "../gameplay/combat.h"
+#include "../gameplay/initiative.h"
+#include "../util/util.h"
 
 // Runs the monster AI
 void runMonster(RoomGrid *room, Entity *entity, Entity *player) {

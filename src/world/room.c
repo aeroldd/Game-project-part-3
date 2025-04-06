@@ -3,10 +3,10 @@
 #include <math.h>
 #include <string.h>
 
-#include "game.h"
+#include "../core/game.h"
 #include "room.h"
-#include "entity.h"
-#include "util.h"
+#include "../entity/entity.h"
+#include "../util/util.h"
 
 
 RoomTile ***createRoomTilesArray(RoomGrid *room) {

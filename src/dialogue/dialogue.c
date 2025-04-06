@@ -4,8 +4,8 @@
 #include <stdlib.h>
 
 #include "dialogue.h"
-#include "util.h"
-#include "input.h"
+#include "../util/util.h"
+#include "../util/input.h"
 
 // Variable names will be a 2 array with {<word to replace>, <value>}
 

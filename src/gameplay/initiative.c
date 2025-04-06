@@ -1,10 +1,10 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#include "game.h"
+#include "../core/game.h"
 #include "initiative.h"
-#include "entity.h"
-#include "util.h"
+#include "../entity/entity.h"
+#include "../util/util.h"
 
 void initList(RoomGrid *room, InitiativeList *list) {
     list->head = NULL;

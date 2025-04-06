@@ -1,7 +1,7 @@
 #ifndef ROOM_H
 #define ROOM_H
 
-#include "game.h"
+#include "../core/game.h"
 
 RoomGrid *createRoomGrid(char* roomName);
 

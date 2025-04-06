@@ -5,8 +5,6 @@
 Reading the dialogue from text files and fancy printing it onto the screen
 ==================================================================================================================*/
 
-#define DIALOGUE_PATH "dialogue/"
-
 // Plays dialogue stored onto a text file, and replaces each keyword in the file with the replacements
 void playDialogue(const char* fileName, char **keywords, char **replacements, int keywordCount);
 

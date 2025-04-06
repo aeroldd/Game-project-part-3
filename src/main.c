@@ -1,14 +1,14 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "game.h"
-#include "room.h"
-#include "combat.h"
-#include "initiative.h"
-#include "entity.h"
-#include "dialogue.h"
-#include "menus.h"
-#include "util.h"
+#include "core/game.h"
+#include "world/room.h"
+#include "gameplay/combat.h"
+#include "gameplay/initiative.h"
+#include "entity/entity.h"
+#include "dialogue/dialogue.h"
+#include "gameplay/menus.h"
+#include "core/util.h"
 
 
 int runRoom(char* roomName, Entity *player) {
