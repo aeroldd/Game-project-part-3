@@ -1,10 +1,11 @@
 #ifndef GAME_H
 #define GAME_H
 
-#define ROOM_PATH "../../assets/rooms/"
-#define ENTITY_PATH "../../assets/entities/"
-#define ITEM_PATH "../../assets/items/"
-#define DIALOGUE_PATH "../../assets/dialogue/"
+// These paths are relative to the exe file
+#define ROOM_PATH "../assets/rooms/"
+#define ENTITY_PATH "../assets/entities/"
+#define ITEM_PATH "../assets/items/"
+#define DIALOGUE_PATH "../assets/dialogue/"
 
 #define MAX(a, b) ((a) > (b) ? (a) : (b))
 #define MIN(a, b) ((a) < (b) ? (a) : (b))
