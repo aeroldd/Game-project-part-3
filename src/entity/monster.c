@@ -9,6 +9,7 @@
 #include "../gameplay/combat.h"
 #include "../gameplay/initiative.h"
 #include "../util/util.h"
+#include "../world/room.h"
 
 // Runs the monster AI
 void runMonster(RoomGrid *room, Entity *entity, Entity *player) {
