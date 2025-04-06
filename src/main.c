@@ -8,7 +8,7 @@
 #include "entity/entity.h"
 #include "dialogue/dialogue.h"
 #include "gameplay/menus.h"
-#include "core/util.h"
+#include "util/util.h"
 
 
 int runRoom(char* roomName, Entity *player) {
