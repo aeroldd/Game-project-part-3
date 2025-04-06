@@ -4,6 +4,7 @@
 #include <stdlib.h>
 
 #include "dialogue.h"
+#include "../core/game.h"
 #include "../util/util.h"
 #include "../util/input.h"
 
