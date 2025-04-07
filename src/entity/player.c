@@ -14,6 +14,8 @@ Entity *createPlayerEntity(char *name, char symbol, Position mapPos, Position gr
     player->symbol = symbol;
     player->weapon = NULL;
 
+    player->detectionRadius = 10;
+
     // Initialise the player's inventory
     initInventory(&(player->inventory), 4);
 
