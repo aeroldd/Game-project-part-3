@@ -112,6 +112,8 @@ typedef struct {
     Position pos;
     char symbol;
     int type;
+    int visible;
+    int discovered;
 } RoomTile;
 
 // Initiative linked list storing the index of the entity
