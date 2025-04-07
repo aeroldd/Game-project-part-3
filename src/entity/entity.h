@@ -18,9 +18,6 @@ Entity *createEntity(char *name, int type, char symbol, Position mapPos, Positio
 Entity *createEntityFromFile(char* entityName, Position mapPos, Position gridPos, int currentHealth);
 void setEntityName(Entity *entity, const char* name);
 
-
-void createPlayer(Entity **player);
-
 Entity *getEntityAtGridPosition(RoomGrid *room, Position pos);
 int setEntityPosition(RoomGrid *room, Entity *e, Position pos);
 
