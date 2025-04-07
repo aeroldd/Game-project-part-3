@@ -6,7 +6,9 @@
 #include "item.h"
 #include "../util/util.h"
 #include "../dialogue/dialogue.h"
-#include "../entity/entity.h"
+#include "../entity/entity_stats.h"
+
+// ITEM CREATION
 
 Item *createItemFromFile(char* itemName, int itemType) {
     // Prepare the file path of the item
