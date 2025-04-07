@@ -3,6 +3,13 @@
 
 #include "../core/game.h"
 
+/*
+ALL CODE PERTAINING TO THE CREATION OF ENTITIES
+previously this file contained all entity related functions but it made it really unmodular
+*/
+
+// ENTITY CREATION
+
 extern int id;
 
 Entity *createEntity(char *name, int type, char symbol, Position mapPos, Position gridPos,
@@ -27,18 +34,5 @@ Entity *getEntityById(Entity **entities, int entityCount, int entityId);
 
 void printEntityStats(Entity *e);
 void printEntities(Entity **e, int entityCount);
-
-// Running entities
-int runEntity(RoomGrid *room, Entity *entity, Entity *player);
-
-// Updates the entity's stats based on the equipment that is equipped
-void updateEntityStats(Entity *player);
-
-void updateEntityArmour(Entity *player);
-void updateEntityWeapon(Entity *player);
-
-void unequipItem(Entity *player, Item *item);
-void unequipWeapon(Entity *player);
-void unequipArmour(Entity *player);
 
 #endif
