@@ -1,7 +1,9 @@
 #include <stdlib.h>
+#include <stdio.h>
 
 #include "game.h"
 #include "entity_stats.h"
+#include "../dialogue/dialogue.h"
 
 // Update the entity's stats based on the equipment equiped
 void updateEntityStats(Entity *entity) {
