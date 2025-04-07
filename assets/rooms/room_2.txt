@@ -1,17 +1,17 @@
 ROOM NAME: Roomasd two
 DIMENSIONS: 12,12
-############
-#          #
-#          #
-#          #
-#          #
-#          #
-#          #
-#          #
-#          #
-#          #
-#          #
-############
+a##########b
+#..........#
+#..........#
+#..........#
+#..........#
+#..........#
+#..........#
+#..........#
+#..........#
+#..........#
+#..........#
+c##########d
 ENTITY COUNT: 5
 MONSTER FILE: bat.txt ; GRID POSITION: 1, 1 ; CURRENT HP: 2
 MONSTER FILE: bat.txt ; GRID POSITION: 10, 7 ; CURRENT HP: 2
