@@ -11,6 +11,7 @@
 #include "../util/input.h"
 #include "../dialogue/dialogue.h"
 #include "../entity/player.h"
+#include "../world/camera.h"
 
 int startGameMenu() {
     printGameTitle();
