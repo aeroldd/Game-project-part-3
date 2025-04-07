@@ -1,0 +1,28 @@
+ROOM NAME: shadow testing
+DIMENSIONS: 20,20
+####################
+#..........#.......#
+####.#####.#.......#
+#..........#.......#
+#.####.#####.......#
+#..................#
+####.###.###.......#
+#......#.#.........#
+#......#.#.........#
+#......#.#.........#
+#..........#.......#
+####################
+####################
+####################
+####################
+####################
+####################
+####################
+####################
+####################
+ENTITY COUNT: 3
+MONSTER FILE: bat.txt ; GRID POSITION: 10, 7 ; CURRENT HP: 2
+MONSTER FILE: bat.txt ; GRID POSITION: 5, 8 ; CURRENT HP: 2
+MONSTER FILE: bat.txt ; GRID POSITION: 9, 1; CURRENT HP: 2
+START DIALOGUE: maze_room/start.txt
+CLEAR DIALOGUE: maze_room/clear.txt
