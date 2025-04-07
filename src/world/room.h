@@ -7,8 +7,6 @@ RoomGrid *createRoomGrid(char* roomName);
 
 RoomTile ***createRoomTilesArray(RoomGrid *room);
 RoomTile *createRoomTile(Position pos, char symbol);
-void displayRoom(RoomGrid *room);
-void displayRoomWithPlayerCamera(RoomGrid *room, Entity *p, int camSize);
 
 int getDistancePos(Position pos1, Position pos2);
 int checkValidPosition(RoomGrid room, Position pos);
