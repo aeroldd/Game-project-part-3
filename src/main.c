@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include <string.h>
 
 #include "core/game.h"
 #include "world/room.h"
@@ -10,13 +11,13 @@
 #include "dialogue/dialogue.h"
 #include "gameplay/menus.h"
 #include "util/util.h"
+#include "entity/entity_runner.h"
+#include "world/map.h"
 
 
-int runRoom(char* roomName, Entity *player) {
+int runRoom(RoomGrid *room, Entity *player) {
     // Create the room
-    RoomGrid *room = createRoomGrid(roomName);
-
-    //printf("room successfully made!");
+    printf("room successfully made!");
 
     //printEntities(room->entities, room->entityCount);
 
@@ -36,10 +37,17 @@ int runRoom(char* roomName, Entity *player) {
 
     // DIALOGUE THINGS
 
-    char *keywords[] = {"{username}"};
-    char *replacements[] = {player->name};
+    // the value x means theres no dialogue 
+    if(!strcmp(room->roomEnterDialogue, "x")) {
+        char *keywords[] = {"{username}"};
+        char *replacements[] = {player->name};
+    
+        playDialogue(room->roomEnterDialogue, keywords, replacements, 1);
+    }
+    else {
+        fancyPrint("%s enters %s\n", player->name, room->name);
+    }
 
-    playDialogue(room->roomEnterDialogue, keywords, replacements, 1);
 
     while(running) {
         system("cls");
@@ -71,7 +79,12 @@ int runRoom(char* roomName, Entity *player) {
         printGameOver(player);
     }
     if(result == PLAYER_WIN) {
-        playDialogue(room->roomClearDialogue, keywords, replacements, 1);
+        if(!strcmp(room->roomEnterDialogue, "x")) {
+            char *keywords[] = {"{username}"};
+            char *replacements[] = {player->name};
+            playDialogue(room->roomClearDialogue, keywords, replacements, 1);
+        }
+        fancyPrint("YOU WIN!\n");
     }
 
     return 0;
@@ -84,6 +97,9 @@ int main() {
     // Initialise and create the player
     Entity *player = NULL;
 
+    // Initialise a map
+    Map *map = createMap();
+
     // Menu things
     int menuChoice = startGameMenu();
 
@@ -95,7 +111,13 @@ int main() {
         // NEW GAME MENU
         case 1: {
             player = newGameMenu();
-            runRoom("maze_room.txt", player);
+            RoomGrid *room = createRoomGrid("starter_room.txt");
+            //printRoomDetails(room);
+            addRoomToMap(map, room);
+            printRoomsinMap(map);
+
+            pressAnyKey();
+            runRoom(room, player);
         }
     }
 
