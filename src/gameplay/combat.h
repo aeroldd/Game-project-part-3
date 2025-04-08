@@ -28,7 +28,8 @@ void removeEntityFromMap(RoomGrid *room, Entity *e);
 // Rewards an entity with gold
 void reward(Entity *e, int gold);
 
-
+// Check if the entity has valid targets around it which it can attack - returns the number of targets
+Entity **getTargets(RoomGrid *room, Entity *entity);
 
 
 #endif

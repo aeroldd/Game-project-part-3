@@ -5,6 +5,7 @@
 #include "../entity/entity.h"
 #include "../util/util.h"
 #include "initiative.h"
+#include "../world/room.h"
 
 int damageEntity(Entity *e, int damage) {
     //printf("damaged %s\n", e->name);
@@ -26,30 +27,32 @@ int attack(RoomGrid *room, Entity *attacker, Entity *reciever) {
     int rollVal = attackRoll(attacker);
     int hit = calculateHit(rollVal, reciever->ac);
 
-    system("cls");
-    printAttackMessage(attacker, reciever);
+    // printAttackMessage(attacker, reciever);
 
-    delay(1000);
+    // delay(1000);
+
+    int damage = 0;
     
     if (hit) {
-        int damage = damageEntity(reciever, attacker->damage);
-        printAttackSuccess(attacker, reciever, damage);
+        damage = damageEntity(reciever, attacker->damage);
+        // printAttackSuccess(attacker, reciever, damage);
     } else {
-        printAttackFailure(attacker, reciever);
+        // printAttackFailure(attacker, reciever);
     }
 
-    delay(1000);
+    // delay(1000);
 
     if (reciever->currentHP <= 0) {
-        printKillMessage(attacker, reciever);
+        // printKillMessage(attacker, reciever);
         kill(room, attacker, reciever);
+        return -100;
     } else {
-        printHealthLeft(reciever);
+        // printHealthLeft(reciever);
     }
 
-    delay(1000);
+    // delay(1000);
 
-    return hit;
+    return damage;
 }
 
 void printAttackMessage(Entity *attacker, Entity *reciever) {
@@ -112,4 +115,11 @@ void reward(Entity *e, int gold) {
     e->gold += gold;
     fancyPrint("%s gained %d gold!\n", e->name, gold);
     delay(1000);
+}
+
+Entity **getTargets(RoomGrid *room, Entity *entity) {
+    // Checking if the player can attack (There are monsters in range)
+    Entity **entities = getEntitiesAroundPoint(room, entity->gridPos);
+
+   return entities;
 }
