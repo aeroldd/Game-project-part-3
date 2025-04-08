@@ -10,7 +10,7 @@ previously this file contained all entity related functions but it made it reall
 
 // ENTITY CREATION
 
-extern int id;
+extern int entityId;
 
 Entity *createEntity(char *name, int type, char symbol, Position mapPos, Position gridPos,
                        int maxHP, int ac, int speed, int initiativeMod, int attack, int damage, int gold,

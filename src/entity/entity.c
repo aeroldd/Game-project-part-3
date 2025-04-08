@@ -12,7 +12,7 @@
 
 // Implement entity-related functions
 
-int id;
+int entityId;
 
 Entity *createEntity(char *name, int type, char symbol, Position mapPos, Position gridPos,
                      int maxHP, int ac, int speed, int initiativeMod, int attack, int damage, int gold, int viewRadius, int blind) {
@@ -225,9 +225,9 @@ int getEntityCount(Entity **entities) {
 }
 
 void addEntityToArray(Entity ***entitiesList, int *entityCount, Entity *entity) {
-    entity->id=id;
+    entity->id=entityId;
 
-    id++;
+    entityId++;
     if (*entitiesList == NULL) {
         *entitiesList = malloc(2 * sizeof(Entity *));
         if (!*entitiesList) {
@@ -246,7 +246,7 @@ void addEntityToArray(Entity ***entitiesList, int *entityCount, Entity *entity) 
     (*entitiesList)[*entityCount + 1] = NULL;
     (*entityCount)++;
 
-    //printf("id %d added. entity count is: %d\n", id, *entityCount);
+    //printf("id %d added. entity count is: %d\n", entityId, *entityCount);
 }
 
 void printEntities(Entity **entities, int entityCount){
