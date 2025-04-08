@@ -5,6 +5,7 @@
 #include "../util/util.h"
 #include "../world/room.h"
 #include "../item/item.h"
+#include "../item/inventory.h"
 
 // Player creation
 Entity *createPlayerEntity(char *name, char symbol, Position mapPos, Position gridPos) {
@@ -17,7 +18,7 @@ Entity *createPlayerEntity(char *name, char symbol, Position mapPos, Position gr
     player->detectionRadius = 10;
 
     // Initialise the player's inventory
-    initInventory(&(player->inventory), 4);
+    attachInventoryToEntity(player, 4);
 
     return player;
 }
