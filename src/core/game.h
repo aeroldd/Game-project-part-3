@@ -40,10 +40,15 @@ typedef struct {
     int type;
 } Item;
 
+typedef struct Entity Entity;
+
 typedef struct {
     Item **items;
     int itemCount;
     int maxCapacity;
+    Entity *owner;
+    int selected;
+    int selectedIndex;
 } Inventory;
 
 typedef struct {
@@ -67,7 +72,7 @@ typedef struct {
 
 // Entity things
 
-typedef struct {
+struct Entity {
     char name[32];
     int type;
     char symbol;
@@ -103,10 +108,19 @@ typedef struct {
     Inventory *inventory;
     Armour *armour;
     Weapon *weapon;
-} Entity;
+};
 
 #define FLOOR 0
 #define WALL 1
+#define DOOR 2
+
+typedef struct RoomGrid RoomGrid;
+typedef struct Door Door;
+
+typedef struct {
+    RoomGrid **rooms; // Array holding pointers to all rooms
+    int roomCount;
+} Map;
 
 typedef struct {
     Position pos;
@@ -114,7 +128,14 @@ typedef struct {
     int type;
     int visible;
     int discovered;
+    Door *door; // NULL if the tile isnt a door
 } RoomTile;
+
+struct Door {
+    Position roomPos;
+    int targetRoomId;
+    Position newPos;
+};
 
 // Initiative linked list storing the index of the entity
 typedef struct Node {
@@ -127,7 +148,8 @@ typedef struct {
 } InitiativeList;
 
 
-typedef struct {
+struct RoomGrid {
+    int id;
     int width;
     int height;
     char name[32];
@@ -142,9 +164,16 @@ typedef struct {
     InitiativeList *initiatives; // Pointer to the InitiativeList
 
     // dialogue file that plays before and after playing a room
-    char roomEnterDialogue[128];
+    char roomDiscoverDialogue[128];
     char roomClearDialogue[128];
-} RoomGrid;
+
+    char roomEnterDialogue[128];
+    char roomExitDialogue[128];
+
+    // DOORS!!!
+    int doorCount;
+    Door **doors;
+};
 
 typedef struct{
     char* name;
