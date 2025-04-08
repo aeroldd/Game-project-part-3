@@ -1,9 +1,15 @@
 #ifndef MAP_H
 #define MAP_H
 
+#include <stdlib.h>
+
 #include "../core/game.h"
 
-// generates the map
-void generateMap(Room (*rooms)[5]);
+extern int id;
+
+Map *createMap();
+void addRoomToMap(Map *map, RoomGrid *room);
+
+void printRoomsinMap(Map *map);
 
 #endif

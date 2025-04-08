@@ -3,6 +3,8 @@
 
 #include "../core/game.h"
 
+extern int roomId;
+
 RoomGrid *createRoomGrid(char* roomName);
 
 RoomTile ***createRoomTilesArray(RoomGrid *room);
@@ -16,5 +18,9 @@ Entity **getEntitiesAroundPoint(RoomGrid *room, Position targetPos);
 int isRoomCleared(RoomGrid *room);
 
 void printRoomCleared(RoomGrid *room, Entity *player);
+
+void printRoomDetails(RoomGrid *room);
+
+int isOnDoor(RoomGrid *room, Entity *entity);
 
 #endif
