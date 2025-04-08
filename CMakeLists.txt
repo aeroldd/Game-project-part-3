@@ -24,6 +24,7 @@ set(SOURCE_FILES
     src/world/map.c src/world/map.h src/world/room.c src/world/room.h
     src/world/camera.c src/world/camera.h
     src/entity/entity_runner.c src/entity/entity_stats.c
+    src/item/inventory.c
 )
 
 # Include directories for headers
