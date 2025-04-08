@@ -3,13 +3,14 @@
 
 #include "../core/game.h"
 #include "monster.h"
-#include "entity.h"
 #include "../dialogue/dialogue.h"
 #include "pathfinding.h"
 #include "../gameplay/combat.h"
 #include "../gameplay/initiative.h"
 #include "../util/util.h"
 #include "../world/room.h"
+#include "../world/camera.h"
+#include "../entity/entity.h"
 
 // Runs the monster AI
 void runMonster(RoomGrid *room, Entity *entity, Entity *player) {
