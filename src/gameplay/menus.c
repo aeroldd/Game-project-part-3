@@ -12,6 +12,7 @@
 #include "../dialogue/dialogue.h"
 #include "../entity/player.h"
 #include "../world/camera.h"
+#include "../item/inventory.h"
 
 int startGameMenu() {
     printGameTitle();
@@ -62,7 +63,7 @@ Entity *newGameMenu() {
 
     char *dialogueKeywords[] = {"{username}"};
     char *dialogueReplacements[] = {player->name};
-    playDialogue("dungeon_enter.txt", dialogueKeywords, dialogueReplacements, 1);
+    //playDialogue("dungeon_enter.txt", dialogueKeywords, dialogueReplacements, 1);
 
     // create a rusty sword object and give it to the player
 
@@ -87,6 +88,8 @@ void createPlayerMenu(Entity **player) {
 
     fancyPrint("Enter your player's map symbol (only one character please) >> ");
     symbol = getchar();
+
+    //printf("reaches here");
     
     *player = createPlayerEntity(username, symbol, (Position) {2,2}, (Position) {2,2});
     printf("================================\n");
@@ -146,6 +149,10 @@ int roomActionMenu(RoomGrid *room, Entity *player) {
             else printf("SKIP TURN [0]\n");
         }
         else printf("FINISH ROOM: [0]\n");
+
+        int door = isOnDoor(room, player);
+
+        printf("is on door - %d\n", door);
 
         // Checking if the player can attack (There are monsters in range)
         Entity **entities = getEntitiesAroundPoint(room, player->gridPos);
