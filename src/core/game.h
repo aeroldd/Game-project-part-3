@@ -119,6 +119,7 @@ typedef struct Door Door;
 
 typedef struct {
     RoomGrid **rooms; // Array holding pointers to all rooms
+    RoomGrid *currentRoom;
     int roomCount;
 } Map;
 
@@ -145,6 +146,7 @@ typedef struct Node {
 
 typedef struct {
     Node *head;
+    int length;
 } InitiativeList;
 
 
@@ -161,10 +163,11 @@ struct RoomGrid {
     int entityCount;
     int monsterCount;
     RoomTile ***tiles; // 2D array of pointers to RoomTile
+
     InitiativeList *initiatives; // Pointer to the InitiativeList
 
     // dialogue file that plays before and after playing a room
-    char roomDiscoverDialogue[128];
+    char roomStartDialogue[128];
     char roomClearDialogue[128];
 
     char roomEnterDialogue[128];
