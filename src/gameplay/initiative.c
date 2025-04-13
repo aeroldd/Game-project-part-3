@@ -9,6 +9,7 @@
 void initList(RoomGrid *room, InitiativeList *list) {
     list->head = NULL;
     room->initiatives=list;
+    list->length=0;
 }
 
 void rollInitiative(Entity *e) {
@@ -32,6 +33,8 @@ void insertInOrder(InitiativeList *list, Entity **entities, int entityCount, int
     Node *newNode = (Node *)malloc(sizeof(Node));
     newNode->entityId = entityId;
     newNode->next = NULL;
+
+    (list->length)++;
 
     //printf("reaches");
 
@@ -73,6 +76,7 @@ void insertInOrder(InitiativeList *list, Entity **entities, int entityCount, int
 // Removes entity from the initiative list
 void removeEntityInitiative(InitiativeList *list, int entityId) {
     if (!list->head) return;  // If list is empty, do nothing
+    (list->length)--;
 
     Node *current = list->head, *prev = NULL;
 
