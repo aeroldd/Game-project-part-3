@@ -18,9 +18,6 @@ void runMonster(RoomGrid *room, Entity *entity, Entity *player) {
     int distanceFromPlayer = getDistancePos(entity->gridPos, player->gridPos);
     if(distanceFromPlayer < 30) {
         printCurrentEntityTurn(entity);
-        //printf("%s sees the player\n", entity->name);
-        // move towards the player
-        // Get the shortest path to the player
         int pathLength = 10;
         Position *path = findShortestPath(room, entity->gridPos, player->gridPos, &pathLength);
 
