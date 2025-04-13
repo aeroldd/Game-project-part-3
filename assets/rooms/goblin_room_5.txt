@@ -1,0 +1,26 @@
+ROOM NAME: GOBLIN
+ID: 5
+DIMENSIONS: 12,12
+############
+#..........#
+#..........#
+#..........#
+#..........#
+#.......####
+#....#.....D
+#....#.....#
+#....#.....#
+#..........#
+#..........#
+############
+ENTITY COUNT: 4
+MONSTER FILE: goblin.txt ; GRID POSITION: 8, 9 ; CURRENT HP: 8
+MONSTER FILE: goblin.txt ; GRID POSITION: 10, 7 ; CURRENT HP: 8
+MONSTER FILE: bat.txt ; GRID POSITION: 4, 7 ; CURRENT HP: 2
+MONSTER FILE: bat.txt ; GRID POSITION: 9, 9 ; CURRENT HP: 2
+START DIALOGUE: x
+CLEAR DIALOGUE: x
+ENTER DIALOGUE: x
+EXIT DIALOGUE: x
+DOOR COUNT: 1
+DOOR: GRID POSITION: 11, 6 ; TARGET ROOM ID: 2 ; TARGET ROOM POS: 0, 2

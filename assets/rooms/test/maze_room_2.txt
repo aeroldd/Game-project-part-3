@@ -1,5 +1,5 @@
 ROOM NAME: Maze
-ID: 0
+ID: 1000
 DIMENSIONS: 12,12
 ############
 #..........#
