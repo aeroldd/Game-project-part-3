@@ -31,7 +31,7 @@ void renderInventory(int y, int x, Inventory *inventory);
 int renderActionMenu(int y, int x, RoomGrid *room, Entity *entity, char key, int canAttack);
 void handleActionMenu(int action, int *inCombatMenu);
 int renderCombatMenu(int y, int x, RoomGrid *room, Entity *entity, Entity **targets, int targetCount, int currentTarget, char key);
-void handleCombatmenu(int option, int *inCombatMenu);
+void handleCombatMenu(int option, int *inCombatMenu);
 
 void highlightMenuOption(WINDOW *win, char *menuOptions[], int length, int menuIdex);
 

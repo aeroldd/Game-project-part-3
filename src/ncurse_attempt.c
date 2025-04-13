@@ -81,7 +81,7 @@ int loop(WINDOW *win, RoomGrid *room, Entity *player) {
         int action;
 
         action = renderActionMenu(17,22, room, player, key, targetCount);
-        handleActionMenu(action, inCombatMenu);
+        handleActionMenu(action, &inCombatMenu);
     }
     else {
         char key = getch();
@@ -91,7 +91,7 @@ int loop(WINDOW *win, RoomGrid *room, Entity *player) {
         int option;
 
         option = renderCombatMenu(23, 22, room, player, targets, targetCount, currentTargetIndex, key);
-        handleCombatMenu(option, inCombatMenu);
+        handleCombatMenu(option, &inCombatMenu);
     }
 
 
