@@ -1,4 +1,4 @@
-NAME: gobilin
+NAME: goblin
 TYPE: 1
 SYMBOL: G
 MAX HEALTH: 8
