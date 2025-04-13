@@ -1,4 +1,4 @@
-dungeon.txt - A text-based dungeon crawler inspired by D&D and Rogue
+###dungeon.txt - A text-based dungeon crawler inspired by D&D and Rogue###
 
 ! Current features !
 Most core mechanics are implemented:
