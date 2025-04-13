@@ -14,15 +14,11 @@
 #include "entity/entity_runner.h"
 #include "world/map.h"
 
-
 int runRoom(RoomGrid *room, Entity *player) {
     // Create the room
     printf("room successfully made!");
 
     //printEntities(room->entities, room->entityCount);
-
-    // Add the player to the entity list
-    addEntityToArray(&(room->entities), &(room->entityCount), player);
 
     // Initialises the initiative list
     InitiativeList list;
@@ -30,24 +26,54 @@ int runRoom(RoomGrid *room, Entity *player) {
     rollAllInitiatives(&list, room->entities, room->entityCount); // rolls all the entities' initiatives
 
     // Set the player's position
-    setEntityPosition(room, player, (Position){1,1});
+    //setEntityPosition(room, player, (Position){1,1});
 
     int running = 1;
     int result = 0;
 
     // DIALOGUE THINGS
 
-    // the value x means theres no dialogue 
-    if(!strcmp(room->roomEnterDialogue, "x")) {
+    // printf("room's dialogues\n");
+
+    // printf("room's entering dialogue %s\n", room->roomEnterDialogue);
+    // printf("room's starting dialogue %s\n", room->roomStartDialogue);
+    // printf("room's clear dialogue %s\n", room->roomClearDialogue);
+    // printf("room's exit dialogue %s\n", room->roomExitDialogue);
+    // pressAnyKey();
+
+    system("cls");
+
+    LINE;
+
+    // Handle room entering dialogue
+    if(!(strcmp(room->roomEnterDialogue, "x") == 0)) {
         char *keywords[] = {"{username}"};
         char *replacements[] = {player->name};
     
         playDialogue(room->roomEnterDialogue, keywords, replacements, 1);
+        pressAnyKey();
     }
     else {
         fancyPrint("%s enters %s\n", player->name, room->name);
+        pressAnyKey();
     }
 
+    LINE;
+
+    // Handle room starting dialogue
+    if(!(strcmp(room->roomStartDialogue, "x")==0)) {
+        char *keywords[] = {"{username}"};
+        char *replacements[] = {player->name};
+    
+        playDialogue(room->roomStartDialogue, keywords, replacements, 1);
+        pressAnyKey();
+    }
+    else {
+        fancyPrint("%s starts %s\n", player->name, room->name);
+        pressAnyKey();
+    }
+
+    LINE;
 
     while(running) {
         system("cls");
@@ -55,14 +81,24 @@ int runRoom(RoomGrid *room, Entity *player) {
         Entity *currentEntity = getEntityByCurrentInitiative(&list, room->entities, room->entityCount);
         currentEntity->isCurrentTurn=1;
 
-        //printEntityStats(currentEntity);
+        int entityRunner = runEntity(room,currentEntity,player);
 
         // run the current entity
-        if(runEntity(room, currentEntity, player) == 2) {
+        if(entityRunner == 2) {
             // run entity returns 2 when the user choses to finish the room and leave the room
             // leaving room code
-            running = 0;
-            result = PLAYER_WIN;
+            if(!strcmp(room->roomEnterDialogue, "x")) {
+                char *keywords[] = {"{username}"};
+                char *replacements[] = {player->name};
+                playDialogue(room->roomClearDialogue, keywords, replacements, 1);
+            }
+            fancyPrint("YOU WIN!\n");
+            return PLAYER_WIN;
+        }
+
+        // change rooms if entity runner returns 10
+        if(entityRunner == 10) {
+            return 10;
         }
 
         currentEntity->isCurrentTurn=0;
@@ -71,26 +107,37 @@ int runRoom(RoomGrid *room, Entity *player) {
         // Check if the player died
         if(player->currentHP<=0) {
             running = 0;
-            result = PLAYER_LOSE;
+            return PLAYER_LOSE;
         }
     }
-
-    if(result == PLAYER_LOSE) {
-        printGameOver(player);
-    }
-    if(result == PLAYER_WIN) {
-        if(!strcmp(room->roomEnterDialogue, "x")) {
-            char *keywords[] = {"{username}"};
-            char *replacements[] = {player->name};
-            playDialogue(room->roomClearDialogue, keywords, replacements, 1);
-        }
-        fancyPrint("YOU WIN!\n");
-    }
-
     return 0;
 }
 
-int main() {
+int runMap(Map *map, Entity *player) {
+    int running = 1;
+
+    while(running) {
+        RoomGrid *currentRoom = map->currentRoom;
+        // Add the player to the entity list
+        addEntityToArray(&(currentRoom->entities), &(currentRoom->entityCount), player);
+        int roomStatus = runRoom(currentRoom, player);
+    
+        // Change room!
+        if(roomStatus == 10) {
+            // get the door
+            RoomTile *currentTile = getRoomTileFromGrid(currentRoom, player->gridPos);
+            Door *door = currentTile->door;
+            //printDoorDetails(door);
+            pressAnyKey();
+            changeRoom(map, door->targetRoomId, player, door->newPos);
+        }
+        if(roomStatus == PLAYER_LOSE) {
+            return PLAYER_LOSE;
+        }
+    }
+}
+
+int runGame() {
     // Set the random seed!
     srand(time(NULL));
 
@@ -99,9 +146,13 @@ int main() {
 
     // Initialise a map
     Map *map = createMap();
+    loadRoomFolder(map);
+    //printRoomsinMap(map);
 
     // Menu things
     int menuChoice = startGameMenu();
+
+    int mapRunner = 0;
 
     switch(menuChoice) {
         case 0: {
@@ -111,18 +162,23 @@ int main() {
         // NEW GAME MENU
         case 1: {
             player = newGameMenu();
-            RoomGrid *room = createRoomGrid("starter_room.txt");
-            //printRoomDetails(room);
-            addRoomToMap(map, room);
-            printRoomsinMap(map);
 
-            pressAnyKey();
-            runRoom(room, player);
+            //printRoomsinMap(map);
+            setCurrentRoomId(map, 0);
+
+            mapRunner = runMap(map, player);
         }
     }
 
-    pressAnyKey();
+    if(mapRunner == PLAYER_LOSE) {
+        printGameOver(player);
+    }
+    if(mapRunner == PLAYER_WIN) {
 
-    //runRoom("maze_test.txt", player);
+    }
+}
+
+int main() {
+    runGame();
     return 0;
 }
