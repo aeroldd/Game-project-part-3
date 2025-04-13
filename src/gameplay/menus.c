@@ -152,8 +152,6 @@ int roomActionMenu(RoomGrid *room, Entity *player) {
 
         int door = isOnDoor(room, player);
 
-        printf("is on door - %d\n", door);
-
         // Checking if the player can attack (There are monsters in range)
         Entity **entities = getEntitiesAroundPoint(room, player->gridPos);
         int entityCount = 0, inAttackRange = 0;
@@ -165,23 +163,12 @@ int roomActionMenu(RoomGrid *room, Entity *player) {
                 }
             }
         }
-
-        if(!inventorySelected) {
-            if(inAttackRange && !attacked) {
-                printf("ATTACK: [1]\n");
-            }
-            else if(attacked && inAttackRange) {
-                printf("ALREADY USED UP ALL ATTACKS.\n");
-            }
-        }
-
-        if(!inventorySelected) printf("INVENTORY: [2]\n");
-
         
         // Inventory actions
         // Get the current selected item
         Item *currentItem = getItemFromInventoryIndex(player->inventory, selectedItemIndex);
         if(inventorySelected) {
+            printf("INVENTORY ITEMS [1 - 4]\n");
             if(currentItem->type == WEAPON || currentItem->type == ARMOUR) {
                 // if the item is equipped, unequip item, else equip item
                 if(((player->weapon == NULL)  && (currentItem->type == WEAPON)) || ((player->armour == NULL) && (currentItem->type == ARMOUR))) {
@@ -192,6 +179,18 @@ int roomActionMenu(RoomGrid *room, Entity *player) {
             else printf("CONSUME %s: [5]\n", currentItem->name);
             printf("DROP %s: [6]\n", currentItem->name);
             printf("EXIT INVENTORY MODE: [x]\n");
+        }
+        // inventory not selected
+        else {
+            if(inAttackRange && !attacked) {
+                printf("ATTACK: [1]\n");
+            }
+            else if(attacked && inAttackRange) {
+                printf("ALREADY USED UP ALL ATTACKS.\n");
+            }
+            printf("INVENTORY: [2]\n");
+            // door opening menu option
+            if(door) printf("ENTER DOOR [3]\n");
         }
 
         char key = getKeyPress();
@@ -261,6 +260,14 @@ int roomActionMenu(RoomGrid *room, Entity *player) {
                 if(inventorySelected) {
                     selectedItemIndex = 2;
                 }
+                // door opening window
+                else {
+                    if(isOnDoor) {
+                        printf("ENTERING THE DOOR!");
+                        delay(1000);
+                        return 10;
+                    }
+                }
                 break;
             }
 
@@ -268,6 +275,7 @@ int roomActionMenu(RoomGrid *room, Entity *player) {
                 if(inventorySelected) {
                     selectedItemIndex = 3;
                 }
+
                 break;
             }
 
