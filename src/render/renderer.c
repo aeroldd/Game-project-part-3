@@ -19,6 +19,10 @@ void initRenderer() {
     initscr(); // initialises the ncurses window
     raw();
     noecho();
+    //cbreak();
+    nodelay(stdscr, 1);
+
+    //test
 
     // Initialise colour if the terminal supports color
     if(has_colors()) {

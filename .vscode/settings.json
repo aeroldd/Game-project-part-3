@@ -10,6 +10,7 @@
         "menus.h": "c",
         "monster.h": "c",
         "room.h": "c",
-        "util.h": "c"
+        "util.h": "c",
+        "entity_runner.h": "c"
     }
 }

@@ -13,6 +13,7 @@
 #include "util/util.h"
 #include "entity/entity_runner.h"
 #include "world/map.h"
+#include "render/shadowcasting.h"
 
 int runRoom(RoomGrid *room, Entity *player) {
     // Create the room
@@ -76,6 +77,8 @@ int runRoom(RoomGrid *room, Entity *player) {
     LINE;
 
     while(running) {
+        // compute fov
+
         system("cls");
         // determine initiative order
         Entity *currentEntity = getEntityByCurrentInitiative(&list, room->entities, room->entityCount);
@@ -164,7 +167,7 @@ int runGame() {
             player = newGameMenu();
 
             //printRoomsinMap(map);
-            setCurrentRoomId(map, 0);
+            setCurrentRoomId(map, 6);
 
             mapRunner = runMap(map, player);
         }

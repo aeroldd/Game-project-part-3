@@ -276,7 +276,6 @@ void printEntityStats(Entity *entity) {
     printf("Weapon: %s (+%d hit, %d)\n", weaponName, entity->attack, entity->damage);
     printf("====================\n");
     printf("Grid position: %d, %d\n", entity->gridPos.x, entity->gridPos.y);
-    printf("At room: %d, %d\n", entity->pos.x, entity->pos.y);
     printf("====================\n");
 }
 

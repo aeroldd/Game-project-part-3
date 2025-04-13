@@ -25,6 +25,7 @@ set(SOURCE_FILES
     src/world/camera.c src/world/camera.h
     src/entity/entity_runner.c src/entity/entity_stats.c
     src/item/inventory.c
+    src/render/shadowcasting.c
 )
 
 # Include directories for headers

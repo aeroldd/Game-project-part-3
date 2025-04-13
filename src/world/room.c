@@ -56,6 +56,18 @@ RoomTile *getRoomTileFromGrid(RoomGrid *room, Position pos) {
     return room->tiles[pos.y][pos.x];
 }
 
+// Prints the tile's symbol with a differnet color based on its visiblity
+void placeTile(RoomTile *tile) {
+    // Check if the tile is visible or discovered
+    if (tile->visible) {
+        printf("\033[37m %c \033[0m", tile->symbol); // White for visible tiles
+    } else if (tile->discovered) {
+        printf("\033[90m %c \033[0m", tile->symbol); // Grey for discovered tiles
+    } else {
+        printf("   ", tile->symbol); // No color for undiscovered tiles (fog)
+    }
+}
+
 Door *createDoor(Position pos, int targetRoomId, Position newPos) {
     // Allocate memory for a door!!!!
     Door *door = malloc(sizeof(Door));

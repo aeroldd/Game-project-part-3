@@ -10,6 +10,8 @@ RoomGrid *createRoomGrid(char* roomName);
 RoomTile ***createRoomTilesArray(RoomGrid *room);
 RoomTile *createRoomTile(Position pos, char symbol);
 
+void placeTile(RoomTile *tile);
+
 RoomTile *getRoomTileFromGrid(RoomGrid *room, Position pos);
 void printDoorDetails(Door *door);
 

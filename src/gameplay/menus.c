@@ -13,6 +13,7 @@
 #include "../entity/player.h"
 #include "../world/camera.h"
 #include "../item/inventory.h"
+#include "../render/shadowcasting.h"
 
 int startGameMenu() {
     printGameTitle();
@@ -91,7 +92,7 @@ void createPlayerMenu(Entity **player) {
 
     //printf("reaches here");
     
-    *player = createPlayerEntity(username, symbol, (Position) {2,2}, (Position) {2,2});
+    *player = createPlayerEntity(username, symbol, (Position) {1,1}, (Position) {1,1});
     printf("================================\n");
 }
 
@@ -129,6 +130,7 @@ int roomActionMenu(RoomGrid *room, Entity *player) {
     int selectedItemIndex = 0;
 
     while(runningRoomActionMenu) {
+        compute_fov(room, player);
         system("cls");
         printEntityStats(player);
         displayRoomWithPlayerCamera(room, player, 5);

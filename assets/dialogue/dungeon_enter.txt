@@ -1,25 +1,46 @@
-[press any key to continue dialogue]
-*THUDS*
-What?
+[Press any key to continue dialogue]
+
+*THUD.*
+
+…What was that?
+
 {wait}
-WHERE AM I?
-{username}.
+
+Wh—Where am I?
+
+{username}…
+
 {wait}
-That's my name?
+
+That name… Is that mine?
+
 {wait}
-* {username} finds themself in a pile of rubble,
-enveloped by darkness, only illuminated by the
-miniscule slivers of light peeking through the
-ceiling *
+
+* {username} slowly blinks against the darkness. They lie half-buried in a cold pile of rubble, the air thick with dust and silence. Only thin shafts of light pierce through cracks in the stone above. *
+
 {wait}
-* Just as {username} clears the rubble on them, a chilly voice
-rings through their spine *
+
+* As {username} pushes the debris away and rises, an icy voice whispers through the gloom, threading chills down their spine. *
+
 {wait}
-You have been chosen to partake in the trials
-of the blade.
-* A ghastly white figure illumates from nothingness 
-and stares at you sternly in your eyes *
+
+You have been summoned…  
+…to face the Trials of the Blade.
+
 {wait}
-It is dangerous to go alone! Take this.
-!!! {username} recieves the rusty sword! !!!
+
+* A pale, spectral figure fades into view, suspended in the air before you. Its eyes — hollow yet piercing — lock onto yours. *
+
+{wait}
+
+It is dangerous out there!
+
+Take this.
+
+{wait}
+
+!!! {username} receives a **Rusty Sword** !!!
+
+*The weight of destiny presses into your palm.*
+
 {wait}

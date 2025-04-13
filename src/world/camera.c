@@ -1,5 +1,6 @@
 #include "camera.h"
 #include "game.h"
+#include "room.h"
 
 #include <stdio.h>
 
@@ -31,33 +32,38 @@ void displayRoomWithPlayerCamera(RoomGrid *room, Entity *p, int camSize) {
             int found = 0;
             for (int z = 0; z < room->entityCount; z++) {
                 Entity *currentEntity = room->entities[z];
-                if ((currentEntity->gridPos.x == x) && (currentEntity->gridPos.y == y)) {
+                if(room->tiles[y][x]->visible) {
 
-                    // Highlight the entity with yellow if the entity is selected
-                    if (currentEntity->selected)
-                        printf("\033[33m %c \033[0m", room->entities[z]->symbol);
-
-                    // Highlight the entity with cyan if its the entity's 
-                    else if (currentEntity->isCurrentTurn) {
-                        printf("\033[36m %c \033[0m", room->entities[z]->symbol);
-                    }
-                    // Check the type of the entity
-                    // If the entity is a player mark it with blue, if the entity is an enemy, mark it with red
-                    else {
-                        if (currentEntity->type == MONSTER) {
-                            printf("\033[31m %c \033[0m", currentEntity->symbol);
+                    if ((currentEntity->gridPos.x == x) && (currentEntity->gridPos.y == y)) {
+    
+                        // Highlight the entity with yellow if the entity is selected
+                        if (currentEntity->selected)
+                            printf("\033[33m %c \033[0m", room->entities[z]->symbol);
+    
+                        // Highlight the entity with cyan if its the entity's 
+                        else if (currentEntity->isCurrentTurn) {
+                            printf("\033[36m %c \033[0m", room->entities[z]->symbol);
                         }
-                        else if (currentEntity->type == PLAYER) {
-                            printf("\033[34m %c \033[0m", currentEntity->symbol);
+                        // Check the type of the entity
+                        // If the entity is a player mark it with blue, if the entity is an enemy, mark it with red
+                        else {
+                            if (currentEntity->type == MONSTER) {
+                                printf("\033[31m %c \033[0m", currentEntity->symbol);
+                            }
+                            else if (currentEntity->type == PLAYER) {
+                                printf("\033[34m %c \033[0m", currentEntity->symbol);
+                            }
                         }
+                            //printf(" %c ", room->entities[z]->symbol);
+                        found = 1;
+                        break;
                     }
-                        //printf(" %c ", room->entities[z]->symbol);
-                    found = 1;
-                    break;
                 }
             }
             if (found) continue;
-            printf(" %c ", room->tiles[y][x]->symbol);
+
+            // FOG OF WAR VISIBILITY!!
+            placeTile(room->tiles[y][x]);
         }
         printf(" |\n");
     }
