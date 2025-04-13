@@ -27,30 +27,30 @@ int attack(RoomGrid *room, Entity *attacker, Entity *reciever) {
     int rollVal = attackRoll(attacker);
     int hit = calculateHit(rollVal, reciever->ac);
 
-    // printAttackMessage(attacker, reciever);
+    printAttackMessage(attacker, reciever);
 
-    // delay(1000);
+    delay(1000);
 
     int damage = 0;
     
     if (hit) {
         damage = damageEntity(reciever, attacker->damage);
-        // printAttackSuccess(attacker, reciever, damage);
+        printAttackSuccess(attacker, reciever, damage);
     } else {
-        // printAttackFailure(attacker, reciever);
+        printAttackFailure(attacker, reciever);
     }
 
-    // delay(1000);
+    delay(1000);
 
     if (reciever->currentHP <= 0) {
-        // printKillMessage(attacker, reciever);
+        printKillMessage(attacker, reciever);
         kill(room, attacker, reciever);
         return -100;
     } else {
-        // printHealthLeft(reciever);
+        printHealthLeft(reciever);
     }
 
-    // delay(1000);
+    pressAnyKey();
 
     return damage;
 }
