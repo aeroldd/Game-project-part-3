@@ -1,30 +1,85 @@
-###dungeon.txt - A text-based dungeon crawler inspired by D&D and Rogue###
+# dungeon.txt - A text-based dungeon crawler inspired by D&D and Rogue #
 
-! Current features !
-Most core mechanics are implemented:
-- Player controlled movement
-- Monster AI pathfinding using breadth first search and combat
-- Dialogue system that can be easily expanded with text files
+LINK TO VIDEO: https://youtu.be/_WDc3PL-Jec
+
+## Features ##
+- Room exploration with fog of war using a shadowcasting algorithm
+- Turn based tactical combat system
+- Monster AI pathfinding using breadth-first search
+- A modular dialogue system
 - Starting menu and character creation
-- Expandable monster roster with text files
-- Designable rooms and levels with text files
+- Designable rooms, items and monsters with text files
 
+## CONTROLS ##
+[WASD] Player movement
+[1] Attack
+(In attack menu) [1] Confirm target [space] Cycle through targets [x] Exit menu
+[2] Inventory 
+(In inventory menu) [1-4] Items [5] Use item [6] Drop item [x] Exit menu
+[3] Enter door
+[0] Skip turn
 
-! PLS NOTE ITS STILL VERY INCOMPLETE !
-TODO: 
-- Level design
-- refactoring the source code files and sort them in a proper directory structure
-- shadowcasting for the player's vision, designing and balancing different monsters
-- possible roguelike endless mode with procedurally generated levels
-- boss monsters
-- changing the room display system and game output to using curses instead of printing each update
-- multiple rooms, doors and level transversal
+[any key] Skip through dialogue
 
-! THIS ONLY WORKS ON WINDOWS !
-TODO: A proper installer or make file to build this game on different OSes and platforms
+## !! Only works on Windows (for now). Future versions will be cross compatible !! ##
 
-Game running instructions:
-Compile the project using compile.bat
-Run the exe file output game.exe
+## Build instructions ##
+### Requirements ###
+Windows (future support for other systems will be implemented in the future)
+GCC compiler
+CMake (Recommended)
+
+With CMake (recommended if CMake is installed, as well as MinGW-make) for windows
+1) Create a build folder
+2) run build_cmake
+3) Game will be output in the /build/ directory
+
+With GCC
+1) Run compile.bat
+--OR--
+Paste this command:
+@echo off
+REM Check if the build folder exists
+IF NOT EXIST build (
+    mkdir build
+)
+
+REM Compile the project
+gcc -std=c99 -o build\game.exe ^
+    src\main.c ^
+    src\dialogue\dialogue.c ^
+    src\entity\entity.c ^
+    src\entity\monster.c ^
+    src\entity\pathfinding.c ^
+    src\entity\player.c ^
+    src\entity\entity_runner.c ^
+    src\entity\entity_stats.c ^
+    src\gameplay\combat.c ^
+    src\gameplay\initiative.c ^
+    src\gameplay\menus.c ^
+    src\item\item.c ^
+    src\item\inventory.c ^
+    src\util\input.c ^
+    src\util\util.c ^
+    src\world\map.c ^
+    src\world\room.c ^
+    src\world\camera.c ^
+    src/render/shadowcasting.c ^
+    -Isrc\core ^
+    -Isrc\dialogue ^
+    -Isrc\entity ^
+    -Isrc\gameplay ^
+    -Isrc\item ^
+    -Isrc\util ^
+    -Isrc\world
+
+REM Output result
+IF %ERRORLEVEL% EQU 0 (
+    echo Build succeeded.
+) ELSE (
+    echo Build failed.
+)
+
+pause
 
 Enjoy!
