@@ -10,7 +10,9 @@
 int runEntity(RoomGrid *room, Entity *entity, Entity *player) {
     // If the entity is a player, it should run the move menu
     if(entity->type==PLAYER){
-        printCurrentEntityTurn(entity);
+        if(room->initiatives->length!=1) {
+            printCurrentEntityTurn(entity);
+        }
         return roomActionMenu(room, entity);
     }
     if(entity->type==MONSTER) {
