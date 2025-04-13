@@ -52,6 +52,7 @@ RoomTile *createRoomTile(Position pos, char symbol) {
 }
 
 RoomTile *getRoomTileFromGrid(RoomGrid *room, Position pos) {
+    if(!checkValidPosition) printf("pos out of bounds\n");
     return room->tiles[pos.y][pos.x];
 }
 
@@ -67,6 +68,25 @@ Door *createDoor(Position pos, int targetRoomId, Position newPos) {
     door->newPos = newPos;
 
     return door;
+}
+
+Door **createDoorsArray(int doorCount) {
+    Door **doors = malloc(sizeof(Door *) * doorCount);
+    if(!doors) {
+        perror("Doors array allocation failed");
+        return NULL;
+    }
+    return doors;
+}
+
+void printDoorsArray(Door **doors, int doorCount) {
+    for(int i = 0; i < doorCount; i++) {
+        printf("Door at current room's pos of (%d, %d), leading to %d at (%d, %d)\n",doors[i]->roomPos.x, doors[i]->roomPos.y, doors[i]->targetRoomId, doors[i]->newPos.x, doors[i]->newPos.y);
+    }
+}
+
+void printDoorDetails(Door *door) {
+    printf("Door at current room's pos of (%d, %d), leading to %d at (%d, %d)", door->roomPos.x, door->roomPos.y, door->targetRoomId, door->newPos.x, door->newPos.y);
 }
 
 int isOnDoor(RoomGrid *room, Entity *entity) {
@@ -89,6 +109,7 @@ int checkValidPosition(RoomGrid room, Position pos) {
 }
 
 RoomGrid *createRoomGrid(char* roomName) {
+    //printf("MAKING %s", roomName);
     char filePath[64];
     strcpy(filePath, ROOM_PATH);
     strcat(filePath, roomName);
@@ -154,7 +175,7 @@ RoomGrid *createRoomGrid(char* roomName) {
     // set the start and finish dialogues
 
     fgets(buffer, sizeof(buffer), gridFile);
-    sscanf(buffer, "START DIALOGUE: %s", roomGrid->roomDiscoverDialogue);
+    sscanf(buffer, "START DIALOGUE: %s", roomGrid->roomStartDialogue);
 
     fgets(buffer, sizeof(buffer), gridFile);
     sscanf(buffer, "CLEAR DIALOGUE: %s", roomGrid->roomClearDialogue);
@@ -170,8 +191,8 @@ RoomGrid *createRoomGrid(char* roomName) {
     fgets(buffer, sizeof(buffer), gridFile);
     sscanf(buffer, "DOOR COUNT: %d", &(roomGrid->doorCount));
 
-    printf("DOOR COUNT IS %d\n", roomGrid->doorCount);
-
+    //printf("DOOR COUNT IS %d\n", roomGrid->doorCount);
+    Door **doors = createDoorsArray(roomGrid->doorCount);
 
     for(int i = 0; i < roomGrid->doorCount; i++) {
         fgets(buffer, sizeof(buffer),  gridFile);
@@ -182,10 +203,10 @@ RoomGrid *createRoomGrid(char* roomName) {
         sscanf(buffer, "DOOR: GRID POSITION: %d, %d ; TARGET ROOM ID: %d ; TARGET ROOM POS: %d, %d",
         &(roomPos.x), &(roomPos.y), &targetRoomId, &(newPos.x), &(newPos.y));
         
-        printf("buffer: %s", buffer);
+        // printf("buffer: %s\n", buffer);
 
-        printf("Door created at %d, %d, which leads to %d (at %d, %d)\n",
-        roomPos.x, roomPos.y, targetRoomId, newPos.x, newPos.y);
+        // printf("Door created at %d, %d, which leads to %d (at %d, %d)\n",
+        // roomPos.x, roomPos.y, targetRoomId, newPos.x, newPos.y);
 
         Door *door = createDoor(roomPos, targetRoomId, newPos);
         // printf("Door created at %d, %d, which leads to %d (at %d, %d)\n",
@@ -194,12 +215,17 @@ RoomGrid *createRoomGrid(char* roomName) {
 
         RoomTile *tile = getRoomTileFromGrid(roomGrid, roomPos);
         tile->door = door;
+        tile->symbol = 'D';
+
+        doors[i] = door;
     }
 
-    // set the 
+    roomGrid->doors = doors;
     fclose(gridFile);
 
-    roomGrid->id = roomId++;
+    //printDoorsArray(roomGrid->doors, roomGrid->doorCount);
+
+    //pressAnyKey();
 
     return roomGrid;
 }
